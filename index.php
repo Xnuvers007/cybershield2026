@@ -343,11 +343,12 @@
             ['id' => '15', 'dir' => '15_File_Upload', 'name' => 'File Upload (MIME)', 'desc' => 'Manipulasi MIME & Defacement'],
             ['id' => '16', 'dir' => '16_SQLi_News', 'name' => 'SQLi (Portal Berita)', 'desc' => 'Error, UNION & DIOS'],
             ['id' => '17', 'dir' => '17_Open_Redirect', 'name' => 'Open Redirect', 'desc' => 'Unvalidated Redirect'],
+            ['id' => '18', 'dir' => '18_Reverse_Tabnabbing', 'name' => 'Reverse Tabnabbing', 'desc' => 'Phishing via window.opener'],
             ['id' => '★', 'dir' => 'bonus_XSS', 'name' => 'Bonus: XSS', 'desc' => 'Cross-Site Scripting'],
         ];
 
         foreach ($labs as $lab) {
-            $is_new = in_array($lab['id'], ['11', '12', '13a', '13b', '14', '15', '16', '17']);
+            $is_new = in_array($lab['id'], ['11', '12', '13a', '13b', '14', '15', '16', '17', '18']);
             echo '<div class="card">';
             echo '<div class="card-content">';
             echo '<h2><span style="color:var(--text-muted);">' . $lab['id'] . '</span> / ' . $lab['name'];

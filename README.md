@@ -111,6 +111,7 @@ docker compose up -d --build
 | 15 | `15_File_Upload/` | Unrestricted Upload | MIME Manipulation & Defacement |
 | 16 | `16_SQLi_News/` | SQL Injection Advanced | Error-based, UNION, DIOS |
 | 17 | `17_Open_Redirect/` | Unvalidated Redirect | Phishing via trusted domain |
+| 18 | `18_Reverse_Tabnabbing/` | Reverse Tabnabbing | Phishing via window.opener hijacking |
 | ★ | `bonus_XSS/` | Cross-Site Scripting | Reflected & Stored XSS |
 
 > Setiap folder berisi **`vuln.php`** (kode rentan) dan **`secure.php`** (kode aman) untuk perbandingan langsung.

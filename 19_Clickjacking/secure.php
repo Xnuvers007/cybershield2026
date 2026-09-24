@@ -26,5 +26,8 @@ header('X-Frame-Options: DENY'); // Bisa juga SAMEORIGIN
         }
         ?>
     </div>
+    <div style="margin-top: 20px;">
+        <a href="attacker.html" style="background:#eab308; color:black; padding:10px 20px; text-decoration:none; border-radius:5px; font-weight:bold; display:inline-block;">⚠️ SIMULASIKAN SERANGAN (Buka Attacker Page)</a>
+    </div>
 </body>
 </html>

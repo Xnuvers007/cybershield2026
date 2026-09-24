@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="id">
+<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Clickjacking — Animasi | CYBERSHIELD 2026</title><link rel="stylesheet" href="shared.css"></head>
+<body>
+<div class="bg-grid"></div><div class="bg-glow bg-glow-1"></div><div class="bg-glow bg-glow-2"></div>
+<div class="page">
+    <div class="anim-header">
+        <div class="anim-badge" style="background:rgba(239,68,68,0.15);color:#ef4444;border:1px solid rgba(239,68,68,0.3);">👻 CLICKJACKING — UI REDRESSING</div>
+        <h1>Cara Kerja <span>Clickjacking</span></h1>
+        <p>Iframe tersembunyi diletakkan di atas tombol palsu sehingga korban tanpa sadar mengeksekusi aksi di situs lain.</p>
+        <div class="nav-links"><a href="index.html" class="nav-link">🏠 Semua Animasi</a></div>
+    </div>
+    <div class="anim-container">
+        <div class="anim-viewport">
+            <div class="flow" id="flow">
+                <div class="flow-step" data-step="0"><div class="step-num">1</div><div class="step-content"><div class="step-label">🎯 Target Rentan</div><div class="step-desc">Aplikasi web tidak mengkonfigurasi header `X-Frame-Options` atau `Content-Security-Policy (frame-ancestors)`.</div></div></div>
+                <div class="step-connector"></div>
+                <div class="flow-step" data-step="1"><div class="step-num">2</div><div class="step-content"><div class="step-label">🕸️ Setup Penyerang</div><div class="step-desc">Penyerang membuat situs palsu (misal: "Game Gratis") yang sangat menarik bagi korban.</div></div></div>
+                <div class="step-connector"></div>
+                <div class="flow-step" data-step="2"><div class="step-num">3</div><div class="step-content"><div class="step-label">👻 Menyembunyikan Iframe</div><div class="step-desc">Penyerang menyisipkan iframe dari situs rentan di atas tombol "Klaim Hadiah", diatur dengan opacity 0.001 (tak kasat mata).</div></div></div>
+                <div class="step-connector"></div>
+                <div class="flow-step" data-step="3"><div class="step-num">4</div><div class="step-content"><div class="step-label">📧 Mengelabui Korban</div><div class="step-desc">Korban yang sudah login di situs rentan mengunjungi situs penyerang.</div></div></div>
+                <div class="step-connector"></div>
+                <div class="flow-step" data-step="4"><div class="step-num">5</div><div class="step-content"><div class="step-label">🖱️ Klik yang Dibajak</div><div class="step-desc">Korban mencoba menekan "Klaim Hadiah", namun kursor sebenarnya menekan tombol "Transfer Uang" atau "Hapus Akun" di iframe tersembunyi.</div></div></div>
+                <div class="step-connector"></div>
+                <div class="flow-step" data-step="5"><div class="step-num">6</div><div class="step-content"><div class="step-label">💥 Eksekusi Fatal</div><div class="step-desc">Aksi berhasil tereksekusi dengan otorisasi korban tanpa sepengetahuan mereka.</div></div></div>
+            </div>
+        </div>
+        <div class="anim-controls"><button class="ctrl-btn" id="prevBtn" onclick="prevStep()" disabled>← Prev</button><span class="step-indicator" id="stepIndicator">1 / 6</span><button class="ctrl-btn primary" id="nextBtn" onclick="nextStep()">Next →</button><button class="ctrl-btn" id="autoBtn" onclick="autoPlay()">▶ Auto</button></div>
+    </div>
+    <div class="code-compare">
+        <div class="code-box"><div class="code-label vuln">⚠️ RENTAN</div><div class="code-body">&lt;?php
+// Tidak ada header proteksi
+session_start();
+
+// Halaman bisa di-embed dimanapun
+echo "Halaman Transfer Uang";
+?&gt;</div></div>
+        <div class="code-box"><div class="code-label safe">✅ AMAN</div><div class="code-body">&lt;?php
+// Browser akan menolak memuat di iframe
+header("X-Frame-Options: DENY");
+
+// Atau izinkan hanya di domain yang sama
+header("X-Frame-Options: SAMEORIGIN");
+?&gt;</div></div>
+    </div>
+    <div class="info-grid">
+        <div class="info-card danger"><h3>💀 Dampak</h3><ul><li>Transfer dana tanpa izin</li><li>Perubahan pengaturan akun</li><li>Follow/Like palsu (Worm)</li><li>Aksi administratif yang tidak disengaja</li></ul></div>
+        <div class="info-card success"><h3>🛡️ Pencegahan</h3><ul><li>X-Frame-Options: DENY</li><li>CSP: frame-ancestors 'none'</li><li>SameSite=Strict cookie flag</li><li>Verifikasi aksi kritikal (password/OTP)</li></ul></div>
+    </div>
+    <div class="anim-disclaimer">⚠️ <strong>EDUKASI ONLY</strong></div>
+</div>
+<script>let current=-1;const total=6;const steps=document.querySelectorAll('.flow-step');function updateSteps(){steps.forEach((s,i)=>{s.classList.remove('active','done');if(i<current)s.classList.add('done');else if(i===current)s.classList.add('active');});document.getElementById('stepIndicator').textContent=`${current+1} / ${total}`;document.getElementById('prevBtn').disabled=current<=0;document.getElementById('nextBtn').disabled=current>=total-1;}function nextStep(){if(current<total-1){current++;updateSteps();}}function prevStep(){if(current>0){current--;updateSteps();}}function autoPlay(){current=-1;updateSteps();let i=0;const iv=setInterval(()=>{if(i>=total){clearInterval(iv);return;}current=i++;updateSteps();},1200);}nextStep();</script>
+</body></html>

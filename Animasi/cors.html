@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="id">
+<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>CORS Misconfiguration — Animasi | CYBERSHIELD 2026</title><link rel="stylesheet" href="shared.css"></head>
+<body>
+<div class="bg-grid"></div><div class="bg-glow bg-glow-1"></div><div class="bg-glow bg-glow-2"></div>
+<div class="page">
+    <div class="anim-header">
+        <div class="anim-badge" style="background:rgba(245,158,11,0.15);color:#f59e0b;border:1px solid rgba(245,158,11,0.3);">🌐 CORS MISCONFIGURATION</div>
+        <h1>Cara Kerja <span>CORS</span> Misconfig</h1>
+        <p>Kesalahan konfigurasi yang mengizinkan situs web mana pun untuk membaca data sensitif dari API Anda.</p>
+        <div class="nav-links"><a href="index.html" class="nav-link">🏠 Semua Animasi</a></div>
+    </div>
+    <div class="anim-container">
+        <div class="anim-viewport">
+            <div class="flow" id="flow">
+                <div class="flow-step" data-step="0"><div class="step-num">1</div><div class="step-content"><div class="step-label">🌐 Same-Origin Policy (SOP)</div><div class="step-desc">Secara default, browser mencegah situs A (hacker.com) membaca respons HTTP dari situs B (api.bank.com).</div></div></div>
+                <div class="step-connector"></div>
+                <div class="flow-step" data-step="1"><div class="step-num">2</div><div class="step-content"><div class="step-label">🔓 Kesalahan Konfigurasi CORS</div><div class="step-desc">Developer yang malas mengkonfigurasi API agar mengembalikan header dinamis `Access-Control-Allow-Origin` yang sama dengan origin siapapun yang memintanya.</div></div></div>
+                <div class="step-connector"></div>
+                <div class="flow-step" data-step="2"><div class="step-num">3</div><div class="step-content"><div class="step-label">🎯 Mengirim Link</div><div class="step-desc">Korban (yang sedang login di bank) dijebak untuk mengunjungi situs penyerang.</div></div></div>
+                <div class="step-connector"></div>
+                <div class="flow-step" data-step="3"><div class="step-num">4</div><div class="step-content"><div class="step-label">📡 Fetching Lintas Domain</div><div class="step-desc">Situs penyerang menjalankan script JavaScript `fetch('api.bank.com', {credentials: 'include'})` secara background.</div></div></div>
+                <div class="step-connector"></div>
+                <div class="flow-step" data-step="4"><div class="step-num">5</div><div class="step-content"><div class="step-label">✅ API Mengizinkan Akses</div><div class="step-desc">API menjawab dengan menyalin Origin penyerang ke header `Allow-Origin`. Browser mengira ini adalah akses yang sah!</div></div></div>
+                <div class="step-connector"></div>
+                <div class="flow-step" data-step="5"><div class="step-num">6</div><div class="step-content"><div class="step-label">💥 Data Bocor</div><div class="step-desc">Situs penyerang kini bisa membaca respons API (misal data profil, API key) dan mengirimnya ke server mereka sendiri.</div></div></div>
+            </div>
+        </div>
+        <div class="anim-controls"><button class="ctrl-btn" id="prevBtn" onclick="prevStep()" disabled>← Prev</button><span class="step-indicator" id="stepIndicator">1 / 6</span><button class="ctrl-btn primary" id="nextBtn" onclick="nextStep()">Next →</button><button class="ctrl-btn" id="autoBtn" onclick="autoPlay()">▶ Auto</button></div>
+    </div>
+    <div class="code-compare">
+        <div class="code-box"><div class="code-label vuln">⚠️ RENTAN</div><div class="code-body">&lt;?php
+// Menerima Origin apapun secara buta!
+$origin = $_SERVER['HTTP_ORIGIN'];
+
+header("Access-Control-Allow-Origin: $origin");
+header("Access-Control-Allow-Credentials: true");
+
+echo json_encode(["secret" =&gt; "data"]);
+?&gt;</div></div>
+        <div class="code-box"><div class="code-label safe">✅ AMAN</div><div class="code-body">&lt;?php
+$allowed = ["https://trust.com"];
+$origin = $_SERVER['HTTP_ORIGIN'];
+
+if (in_array($origin, $allowed)) {
+    header("Access-Control-Allow-Origin: $origin");
+    header("Access-Control-Allow-Credentials: true");
+}
+?&gt;</div></div>
+    </div>
+    <div class="info-grid">
+        <div class="info-card danger"><h3>💀 Dampak</h3><ul><li>Pencurian token sesi atau API Key</li><li>Kebocoran data PII (Identitas pribadi)</li><li>Pengambilalihan Akun (Account Takeover)</li></ul></div>
+        <div class="info-card success"><h3>🛡️ Pencegahan</h3><ul><li>Gunakan Origin Whitelist yang ketat</li><li>Jangan pernah gunakan wildcard `*` dengan credentials `true`</li><li>Validasi origin secara eksplisit dengan Regex yang aman</li></ul></div>
+    </div>
+    <div class="anim-disclaimer">⚠️ <strong>EDUKASI ONLY</strong></div>
+</div>
+<script>let current=-1;const total=6;const steps=document.querySelectorAll('.flow-step');function updateSteps(){steps.forEach((s,i)=>{s.classList.remove('active','done');if(i<current)s.classList.add('done');else if(i===current)s.classList.add('active');});document.getElementById('stepIndicator').textContent=`${current+1} / ${total}`;document.getElementById('prevBtn').disabled=current<=0;document.getElementById('nextBtn').disabled=current>=total-1;}function nextStep(){if(current<total-1){current++;updateSteps();}}function prevStep(){if(current>0){current--;updateSteps();}}function autoPlay(){current=-1;updateSteps();let i=0;const iv=setInterval(()=>{if(i>=total){clearInterval(iv);return;}current=i++;updateSteps();},1200);}nextStep();</script>
+</body></html>

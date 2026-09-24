@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="id">
+<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Reverse Tabnabbing — Animasi | CYBERSHIELD 2026</title><link rel="stylesheet" href="shared.css"></head>
+<body>
+<div class="bg-grid"></div><div class="bg-glow bg-glow-1"></div><div class="bg-glow bg-glow-2"></div>
+<div class="page">
+    <div class="anim-header">
+        <div class="anim-badge" style="background:rgba(236,72,153,0.15);color:#ec4899;border:1px solid rgba(236,72,153,0.3);">🪝 REVERSE TABNABBING</div>
+        <h1>Cara Kerja <span>Tabnabbing</span></h1>
+        <p>Phishing cerdik yang membajak "tab induk" asal secara diam-diam setelah tautan dibuka di tab baru.</p>
+        <div class="nav-links"><a href="index.html" class="nav-link">🏠 Semua Animasi</a></div>
+    </div>
+    <div class="anim-container">
+        <div class="anim-viewport">
+            <div class="flow" id="flow">
+                <div class="flow-step" data-step="0"><div class="step-num">1</div><div class="step-content"><div class="step-label">🔗 Tautan Tak Terlindungi</div><div class="step-desc">Aplikasi web (Forum/Chat) mengizinkan user memposting tautan eksternal menggunakan atribut `target="_blank"` tanpa perlindungan `noopener`.</div></div></div>
+                <div class="step-connector"></div>
+                <div class="flow-step" data-step="1"><div class="step-num">2</div><div class="step-content"><div class="step-label">🖱️ Tab Baru Terbuka</div><div class="step-desc">Korban mengklik tautan tersebut, dan situs penyerang terbuka di tab browser yang baru.</div></div></div>
+                <div class="step-connector"></div>
+                <div class="flow-step" data-step="2"><div class="step-num">3</div><div class="step-content"><div class="step-label">🎣 Skrip Pembajak</div><div class="step-desc">Di tab baru, skrip berbahaya milik penyerang menggunakan objek `window.opener.location` untuk mengubah URL tab ASAL (tab sebelumnya yang masih terbuka).</div></div></div>
+                <div class="step-connector"></div>
+                <div class="flow-step" data-step="3"><div class="step-num">4</div><div class="step-content"><div class="step-label">🔄 Tab Asal Berubah (Phishing)</div><div class="step-desc">Tab asal yang tadinya halaman Forum terpercaya, tiba-tiba dialihkan ke halaman login palsu yang mirip persis.</div></div></div>
+                <div class="step-connector"></div>
+                <div class="flow-step" data-step="4"><div class="step-num">5</div><div class="step-content"><div class="step-label">🔐 Korban Tertipu</div><div class="step-desc">Korban kembali ke tab asal, melihat tampilan "Sesi Berakhir, Silakan Login Ulang", lalu memasukkan passwordnya tanpa curiga karena tab tersebut memang asalnya dari situs asli. Kredensial dicuri!</div></div></div>
+            </div>
+        </div>
+        <div class="anim-controls"><button class="ctrl-btn" id="prevBtn" onclick="prevStep()" disabled>← Prev</button><span class="step-indicator" id="stepIndicator">1 / 5</span><button class="ctrl-btn primary" id="nextBtn" onclick="nextStep()">Next →</button><button class="ctrl-btn" id="autoBtn" onclick="autoPlay()">▶ Auto</button></div>
+    </div>
+    <div class="code-compare">
+        <div class="code-box"><div class="code-label vuln">⚠️ RENTAN</div><div class="code-body">&lt;!-- Situs Korban --&gt;
+&lt;a href="https://hacker.com" target="_blank"&gt;
+  Klik Saya!
+&lt;/a&gt;
+
+// Situs Penyerang (hacker.com):
+window.opener.location = "https://phishing.com/login";</div></div>
+        <div class="code-box"><div class="code-label safe">✅ AMAN</div><div class="code-body">&lt;!-- Situs Korban (Aman) --&gt;
+&lt;a href="https://hacker.com" 
+   target="_blank" 
+   rel="noopener noreferrer"&gt;
+  Klik Saya!
+&lt;/a&gt;
+
+// window.opener bernilai NULL
+// Serangan gagal.</div></div>
+    </div>
+    <div class="info-grid">
+        <div class="info-card danger"><h3>💀 Dampak</h3><ul><li>Pencurian kredensial lewat Phishing</li><li>Hilangnya kepercayaan pengguna pada platform</li><li>Distribusi malware</li></ul></div>
+        <div class="info-card success"><h3>🛡️ Pencegahan</h3><ul><li>Selalu tambahkan `rel="noopener noreferrer"` saat menggunakan `target="_blank"`</li><li>Banyak browser modern (Chrome 88+) mulai menjadikan `noopener` sebagai default, namun tetap wajib ditambahkan untuk browser lama.</li></ul></div>
+    </div>
+    <div class="anim-disclaimer">⚠️ <strong>EDUKASI ONLY</strong></div>
+</div>
+<script>let current=-1;const total=5;const steps=document.querySelectorAll('.flow-step');function updateSteps(){steps.forEach((s,i)=>{s.classList.remove('active','done');if(i<current)s.classList.add('done');else if(i===current)s.classList.add('active');});document.getElementById('stepIndicator').textContent=`${current+1} / ${total}`;document.getElementById('prevBtn').disabled=current<=0;document.getElementById('nextBtn').disabled=current>=total-1;}function nextStep(){if(current<total-1){current++;updateSteps();}}function prevStep(){if(current>0){current--;updateSteps();}}function autoPlay(){current=-1;updateSteps();let i=0;const iv=setInterval(()=>{if(i>=total){clearInterval(iv);return;}current=i++;updateSteps();},1200);}nextStep();</script>
+</body></html>

@@ -118,7 +118,7 @@
         </div>
 
         <div class="stats-bar">
-            <div class="stat"><div class="stat-num" style="color:#ef4444;">20</div><div class="stat-label">Total Animasi</div></div>
+            <div class="stat"><div class="stat-num" style="color:#ef4444;">24</div><div class="stat-label">Total Animasi</div></div>
             <div class="stat"><div class="stat-num" style="color:#f59e0b;">10</div><div class="stat-label">OWASP Top 10</div></div>
             <div class="stat"><div class="stat-num" style="color:#00f0ff;">10</div><div class="stat-label">Bonus Kerentanan</div></div>
         </div>
@@ -180,6 +180,13 @@
                 <span class="card-severity sev-critical">CRITICAL — PALING BERBAHAYA</span>
                 <div class="card-arrow">→</div>
             </a>
+            <a href="ssti.html" class="anim-card" style="--card-accent: #ef4444;">
+                <div class="card-icon">💻</div>
+                <div class="card-title">SSTI (Server-Side Template Injection)</div>
+                <div class="card-desc">Eksekusi payload melalui mesin template (Twig/Jinja) yang mengarah ke RCE.</div>
+                <span class="card-severity sev-critical">CRITICAL 🆕</span>
+                <div class="card-arrow">→</div>
+            </a>
             <a href="ssrf.html" class="anim-card" style="--card-accent: #3b82f6;">
                 <div class="card-icon">🔄</div>
                 <div class="card-title">SSRF — Server-Side Request Forgery</div>
@@ -234,6 +241,13 @@
                 <span class="card-severity sev-high">HIGH</span>
                 <div class="card-arrow">→</div>
             </a>
+            <a href="clickjacking.html" class="anim-card" style="--card-accent: #ef4444;">
+                <div class="card-icon">👻</div>
+                <div class="card-title">Clickjacking (UI Redressing)</div>
+                <div class="card-desc">Iframe tersembunyi memanipulasi korban untuk mengeksekusi aksi tanpa sadar.</div>
+                <span class="card-severity sev-high">HIGH 🆕</span>
+                <div class="card-arrow">→</div>
+            </a>
         </div>
 
         <!-- DATA & CONFIG -->
@@ -272,6 +286,20 @@
                 <div class="card-title">Open Redirect</div>
                 <div class="card-desc">Redirect tanpa validasi → korban diarahkan ke phishing menggunakan domain terpercaya.</div>
                 <span class="card-severity sev-medium">MEDIUM</span>
+                <div class="card-arrow">→</div>
+            </a>
+            <a href="cors.html" class="anim-card" style="--card-accent: #f59e0b;">
+                <div class="card-icon">🌐</div>
+                <div class="card-title">CORS Misconfiguration</div>
+                <div class="card-desc">Salah konfigurasi origin mengizinkan penyerang mencuri data sensitif via API.</div>
+                <span class="card-severity sev-high">HIGH 🆕</span>
+                <div class="card-arrow">→</div>
+            </a>
+            <a href="reverse_tabnabbing.html" class="anim-card" style="--card-accent: #ec4899;">
+                <div class="card-icon">🪝</div>
+                <div class="card-title">Reverse Tabnabbing</div>
+                <div class="card-desc">Phishing yang membajak tab asal setelah klik link `target="_blank"`.</div>
+                <span class="card-severity sev-high">HIGH 🆕</span>
                 <div class="card-arrow">→</div>
             </a>
         </div>

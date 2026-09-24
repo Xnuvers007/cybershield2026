@@ -344,11 +344,14 @@
             ['id' => '16', 'dir' => '16_SQLi_News', 'name' => 'SQLi (Portal Berita)', 'desc' => 'Error, UNION & DIOS'],
             ['id' => '17', 'dir' => '17_Open_Redirect', 'name' => 'Open Redirect', 'desc' => 'Unvalidated Redirect'],
             ['id' => '18', 'dir' => '18_Reverse_Tabnabbing', 'name' => 'Reverse Tabnabbing', 'desc' => 'Phishing via window.opener'],
+            ['id' => '19', 'dir' => '19_Clickjacking', 'name' => 'Clickjacking', 'desc' => 'Iframe UI Redressing'],
+            ['id' => '20', 'dir' => '20_CORS_Misconfig', 'name' => 'CORS Misconfiguration', 'desc' => 'Pencurian Data Sensitif via Origin'],
+            ['id' => '21', 'dir' => '21_SSTI', 'name' => 'SSTI', 'desc' => 'Server-Side Template Injection'],
             ['id' => '★', 'dir' => 'bonus_XSS', 'name' => 'Bonus: XSS', 'desc' => 'Cross-Site Scripting'],
         ];
 
         foreach ($labs as $lab) {
-            $is_new = in_array($lab['id'], ['11', '12', '13a', '13b', '14', '15', '16', '17', '18']);
+            $is_new = in_array($lab['id'], ['11', '12', '13a', '13b', '14', '15', '16', '17', '18', '19', '20', '21']);
             echo '<div class="card">';
             echo '<div class="card-content">';
             echo '<h2><span style="color:var(--text-muted);">' . $lab['id'] . '</span> / ' . $lab['name'];

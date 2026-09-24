@@ -112,6 +112,9 @@ docker compose up -d --build
 | 16 | `16_SQLi_News/` | SQL Injection Advanced | Error-based, UNION, DIOS |
 | 17 | `17_Open_Redirect/` | Unvalidated Redirect | Phishing via trusted domain |
 | 18 | `18_Reverse_Tabnabbing/` | Reverse Tabnabbing | Phishing via window.opener hijacking |
+| 19 | `19_Clickjacking/` | Clickjacking | Iframe UI Redressing untuk Transfer Uang |
+| 20 | `20_CORS_Misconfig/` | CORS Misconfiguration | Pencurian Data API Lintas Domain |
+| 21 | `21_SSTI/` | Server-Side Template Injection | RCE via PHP Template Engine Parsing |
 | ★ | `bonus_XSS/` | Cross-Site Scripting | Reflected & Stored XSS |
 
 > Setiap folder berisi **`vuln.php`** (kode rentan) dan **`secure.php`** (kode aman) untuk perbandingan langsung.

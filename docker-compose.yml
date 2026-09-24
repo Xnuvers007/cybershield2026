@@ -34,8 +34,7 @@ services:
     ports:
       - "3307:3306"
     volumes:
-      - ./setup_database.sql:/docker-entrypoint-initdb.d/01-setup.sql
-      - ./setup_target.sql:/docker-entrypoint-initdb.d/02-target.sql
+      - ./database/setup_database.sql:/docker-entrypoint-initdb.d/01-setup.sql
       - db_data:/var/lib/mysql
     healthcheck:
       test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]

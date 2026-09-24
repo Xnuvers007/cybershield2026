@@ -66,15 +66,13 @@ git clone <url-repo> cybershield2026
 **Cara A — Lewat phpMyAdmin (GUI):**
 1. Buka browser → `http://localhost/phpmyadmin`
 2. Klik tab **Import**
-3. Pilih file `setup_database.sql` dari folder `cybershield2026`
+3. Pilih file `setup_database.sql` dari dalam folder `cybershield2026/database`
 4. Klik **Go / Kirim**
-5. Ulangi untuk file `setup_target.sql`
 
 **Cara B — Lewat Terminal (CMD):**
 ```bash
 cd C:\xampp\htdocs\cybershield2026
-C:\xampp\mysql\bin\mysql.exe -u root < setup_database.sql
-C:\xampp\mysql\bin\mysql.exe -u root < setup_target.sql
+C:\xampp\mysql\bin\mysql.exe -u root < database/setup_database.sql
 ```
 
 ### Langkah 5: Buka di Browser
@@ -115,8 +113,7 @@ C:\laragon\www\cybershield2026
 2. Jalankan:
 ```bash
 cd C:\laragon\www\cybershield2026
-mysql -u root < setup_database.sql
-mysql -u root < setup_target.sql
+mysql -u root < database/setup_database.sql
 ```
 
 **Lewat phpMyAdmin:**
@@ -174,7 +171,7 @@ docker compose up -d --build
 
 > Docker akan otomatis:
 > - Membangun image PHP+Apache
-> - Menjalankan MySQL dan mengimport `setup_database.sql` + `setup_target.sql`
+> - Menjalankan MySQL dan mengimport `database/setup_database.sql`
 > - Menjalankan phpMyAdmin
 
 ### Langkah 3: Buka di Browser
@@ -243,8 +240,7 @@ Buka terminal, lalu masuk ke folder tempat Anda menyimpan project:
 # Masuk ke folder project (sesuaikan path-nya)
 cd C:\xampp\htdocs\cybershield2026   # contoh jika pakai XAMPP
 
-cmd /c "mysql -u root < setup_database.sql"
-cmd /c "mysql -u root < setup_target.sql"
+cmd /c "mysql -u root < database/setup_database.sql"
 ```
 
 **Bash (Linux/macOS):**
@@ -252,8 +248,7 @@ cmd /c "mysql -u root < setup_target.sql"
 # Masuk ke folder project (sesuaikan path-nya)
 cd ~/cybershield2026
 
-mysql -u root < setup_database.sql
-mysql -u root < setup_target.sql
+mysql -u root < database/setup_database.sql
 ```
 
 ### Langkah 3: Jalankan PHP Built-in Server
@@ -296,8 +291,7 @@ Lab ini membutuhkan **2 file SQL** yang harus diimport:
 
 | File | Isi |
 |------|-----|
-| `setup_database.sql` | Tabel `users`, `products`, `comments` + data dummy |
-| `setup_target.sql` | Tabel `news` untuk lab SQLi Portal Berita |
+| `database/setup_database.sql` | Tabel lab dan portal berita + data dummy |
 
 ---
 
@@ -311,7 +305,7 @@ Lab ini membutuhkan **2 file SQL** yang harus diimport:
 ### "Table doesn't exist"
 - Anda belum mengimport database. Jalankan:
   ```bash
-  mysql -u root < setup_database.sql
+  mysql -u root < database/setup_database.sql
   ```
 
 ### Halaman blank / putih

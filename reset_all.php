@@ -64,14 +64,12 @@ function run_sql_file($conn, $filename) {
     <hr style="border: 1px solid #333; margin: 20px 0;">
 
     <?php
-    // 1. Eksekusi setup_database.sql
-    echo "<p>Memproses <code>setup_database.sql</code> (users, products, comments)...</p>";
-    run_sql_file($conn, 'setup_database.sql');
+    // 1. Eksekusi database/setup_database.sql
+    echo "<p>Memproses <code>database/setup_database.sql</code> (seluruh tabel lab & target)...</p>";
+    run_sql_file($conn, 'database/setup_database.sql');
     echo "<div class='success'>✔️ Tabel Utama berhasil di-reset.</div>";
 
-    // 2. Eksekusi setup_target.sql
-    echo "<p>Memproses <code>setup_target.sql</code> (target_users, target_posts)...</p>";
-    run_sql_file($conn, 'setup_target.sql');
+
     echo "<div class='success'>✔️ Tabel Target Web (CyberBoard) berhasil di-reset.</div>";
 
     // 3. Setup Lab 16 (SQLi News)

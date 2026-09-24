@@ -55,8 +55,7 @@ cd cybershield2026
 # (Bisa juga langsung klik tombol "Code" -> "Download ZIP" di GitHub jika tidak ada Git)
 
 # 2. Import database
-mysql -u root < setup_database.sql
-mysql -u root < setup_target.sql
+mysql -u root < database/setup_database.sql
 
 # 3. Jalankan server
 php -S 0.0.0.0:8000
@@ -144,8 +143,8 @@ cybershield2026/
 ├── 🔧 install.php                  # Panduan instalasi interaktif
 ├── 🎮 quiz_kahoot.md               # Bank soal kuis Kahoot
 │
-├── 🗄️ setup_database.sql           # Database utama (users, products, comments)
-├── 🗄️ setup_target.sql             # Database portal berita (SQLi News)
+├── 🗄️ database/
+│   └── setup_database.sql          # Database utama dan portal berita
 ├── 🔄 reset_all.php                # Reset seluruh lab ke kondisi awal
 │
 ├── 🐳 Dockerfile                   # Docker image (PHP 8.2 + Apache)

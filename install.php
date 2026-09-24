@@ -372,16 +372,16 @@
                     <ol>
                         <li>Buka browser → <code>http://localhost/phpmyadmin</code></li>
                         <li>Klik tab <strong>Import</strong></li>
-                        <li>Pilih file <code>setup_database.sql</code></li>
+                        <li>Pilih file <code>database/setup_database.sql</code></li>
                         <li>Klik <strong>Go</strong></li>
-                        <li>Ulangi untuk <code>setup_target.sql</code></li>
+                        
                     </ol>
                     <p style="margin-top:12px;"><strong style="color:var(--accent-cyan);">Cara B — Terminal (CMD):</strong></p>
                     <pre><span class="comment"># Masuk ke folder project</span>
 <span class="cmd">cd C:\xampp\htdocs\cybershield2026</span>
 
-<span class="cmd">C:\xampp\mysql\bin\mysql.exe -u root &lt; setup_database.sql</span>
-<span class="cmd">C:\xampp\mysql\bin\mysql.exe -u root &lt; setup_target.sql</span></pre>
+<span class="cmd">C:\xampp\mysql\bin\mysql.exe -u root &lt; database/setup_database.sql</span>
+</pre>
                 </div>
 
                 <div class="step">
@@ -434,8 +434,8 @@
                     <h3>Langkah 4: Import Database</h3>
                     <p>Klik kanan di Laragon → <strong>Terminal</strong>, lalu jalankan:</p>
                     <pre><span class="cmd">cd C:\laragon\www\cybershield2026</span>
-<span class="cmd">mysql -u root &lt; setup_database.sql</span>
-<span class="cmd">mysql -u root &lt; setup_target.sql</span></pre>
+<span class="cmd">mysql -u root &lt; database/setup_database.sql</span>
+</pre>
                 </div>
 
                 <div class="step">
@@ -555,14 +555,14 @@
                     <pre><span class="comment"># Masuk ke folder project (sesuaikan path)</span>
 <span class="cmd">cd C:\xampp\htdocs\cybershield2026</span>
 
-<span class="cmd">cmd /c "mysql -u root &lt; setup_database.sql"</span>
-<span class="cmd">cmd /c "mysql -u root &lt; setup_target.sql"</span></pre>
+<span class="cmd">cmd /c "mysql -u root &lt; database/setup_database.sql"</span>
+</pre>
                     <p style="margin-top:12px;"><strong style="color:var(--accent-cyan);">Bash (Linux/macOS):</strong></p>
                     <pre><span class="comment"># Masuk ke folder project (sesuaikan path)</span>
 <span class="cmd">cd ~/cybershield2026</span>
 
-<span class="cmd">mysql -u root &lt; setup_database.sql</span>
-<span class="cmd">mysql -u root &lt; setup_target.sql</span></pre>
+<span class="cmd">mysql -u root &lt; database/setup_database.sql</span>
+</pre>
                 </div>
 
                 <div class="step">
@@ -633,8 +633,8 @@
 <span class="cmd">EXIT;</span>
 
 <span class="comment"># Import data</span>
-<span class="cmd">mysql -u root < /var/www/html/cybershield2026/setup_database.sql</span>
-<span class="cmd">mysql -u root < /var/www/html/cybershield2026/setup_target.sql</span></pre>
+<span class="cmd">mysql -u root < /var/www/html/cybershield2026/database/setup_database.sql</span>
+<span class="cmd">mysql -u root < /var/www/html/cybershield2026/</span></pre>
                     <div class="info-box tip">💡 Jika ingin menggunakan password untuk root, jangan lupa update koneksi di file PHP.</div>
                 </div>
 
@@ -749,8 +749,8 @@
         <p style="color:var(--text-muted); font-size:0.82rem; margin-top:12px;">File SQL yang harus diimport:</p>
         <table>
             <tr><th>File</th><th>Isi</th></tr>
-            <tr><td><code>setup_database.sql</code></td><td>Tabel users, products, comments + data dummy</td></tr>
-            <tr><td><code>setup_target.sql</code></td><td>Tabel news untuk lab SQLi Portal Berita</td></tr>
+            <tr><td><code>database/setup_database.sql</code></td><td>Tabel users, products, comments + data dummy</td></tr>
+            
         </table>
     </div>
 
@@ -765,7 +765,7 @@
         </details>
         <details class="trouble-item">
             <summary>"Table doesn't exist"</summary>
-            <p>Anda belum mengimport database. Jalankan: <code>mysql -u root < setup_database.sql</code></p>
+            <p>Anda belum mengimport database. Jalankan: <code>mysql -u root < database/setup_database.sql</code></p>
         </details>
         <details class="trouble-item">
             <summary>Halaman blank / putih</summary>

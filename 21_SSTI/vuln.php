@@ -7,15 +7,19 @@ $name = isset($_GET['name']) ? $_GET['name'] : 'Guest';
 
 // Template yang diberikan oleh user (Misalnya diambil dari DB atau input)
 $template = "<h2>Selamat datang, $name!</h2>";
-$template .= "<p>Sistem Template Kustom: Gunakan {{ ekspresi }} untuk kalkulasi matematika.</p>";
+$template .= "<p>Sistem Template Kustom: Gunakan <code>&#123;&#123; kalkulasi &#125;&#125;</code> untuk kalkulasi matematika.</p>";
 
 // Mensimulasikan parser template sederhana yang rentan
 if (preg_match_all('/\{\{(.+?)\}\}/', $template, $matches)) {
     foreach($matches[1] as $match) {
         // RENTAN: Mengeksekusi string di dalam {{ }} sebagai kode PHP langsung!
         // Coba payload: ?name={{ system('whoami') }} atau ?name={{ phpinfo() }}
-        $evaluated = @eval("return $match;");
-        $template = str_replace('{{'.$match.'}}', $evaluated, $template);
+        try {
+            $evaluated = eval("return $match;");
+            $template = str_replace('{{'.$match.'}}', $evaluated, $template);
+        } catch (Throwable $e) {
+            $template = str_replace('{{'.$match.'}}', "[Error: " . $e->getMessage() . "]", $template);
+        }
     }
 }
 ?>

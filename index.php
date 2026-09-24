@@ -367,9 +367,6 @@
                 echo '<div class="links">';
                 echo '<a href="' . $lab['dir'] . '/' . $vuln_file . '" class="btn btn-vuln"># EXPLOIT</a>';
                 echo '<a href="' . $lab['dir'] . '/' . $secure_file . '" class="btn btn-secure"># PATCH</a>';
-                if (file_exists(__DIR__ . '/' . $lab['dir'] . '/attacker.html')) {
-                    echo '<a href="' . $lab['dir'] . '/attacker.html" class="btn" style="background:var(--accent-yellow); color:#000;"># ATTACKER</a>';
-                }
                 echo '</div>';
             } else {
                 echo '<div style="color:var(--accent-red); font-size:0.8rem; margin-top:15px; padding:8px; border:1px dashed var(--accent-red);">ERR_DIR_NOT_FOUND</div>';

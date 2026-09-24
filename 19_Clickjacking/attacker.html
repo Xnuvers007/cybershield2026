@@ -20,10 +20,20 @@
         }
 
         .opacity-control { margin-top: 20px; }
+        .target-switcher { margin-bottom: 20px; background: #1e293b; padding: 10px; border-radius: 8px; display: inline-block; }
+        .target-switcher select { padding: 5px 10px; font-size: 1rem; border-radius: 4px; }
     </style>
 </head>
 <body>
     <h1>🎮 Mainkan Game Ini dan Menangkan Hadiah!</h1>
+    
+    <div class="target-switcher">
+        <label>Pilih Target Iframe:</label>
+        <select onchange="document.getElementById('targetFrame').src = this.value;">
+            <option value="vuln.php">🔴 vuln.php (Tanpa Proteksi)</option>
+            <option value="secure.php">🟢 secure.php (X-Frame-Options: DENY)</option>
+        </select>
+    </div>
     
     <div class="game-container">
         <!-- Tombol palsu yang terlihat oleh korban -->

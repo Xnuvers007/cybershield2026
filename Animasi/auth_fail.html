@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="id">
+<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Auth Failures — Animasi | CYBERSHIELD 2026</title><link rel="stylesheet" href="shared.css"></head>
+<body>
+<div class="bg-grid"></div><div class="bg-glow bg-glow-1"></div><div class="bg-glow bg-glow-2"></div>
+<div class="page">
+    <div class="anim-header">
+        <div class="anim-badge" style="background:rgba(239,68,68,0.15);color:#ef4444;border:1px solid rgba(239,68,68,0.3);">🔓 AUTHENTICATION FAILURES — A07:2026</div>
+        <h1>Cara Kerja <span>Auth Failures</span></h1>
+        <p>Brute force, credential stuffing, session fixation — kelemahan di proses login dan session management.</p>
+        <div class="nav-links"><a href="idor.html" class="nav-link">← IDOR</a><a href="index.html" class="nav-link">🏠 Semua Animasi</a><a href="csrf.html" class="nav-link">CSRF →</a></div>
+    </div>
+    <div class="anim-container">
+        <div class="anim-viewport">
+            <div class="flow" id="flow">
+                <div class="flow-step" data-step="0"><div class="step-num">1</div><div class="step-content"><div class="step-label">🎯 Target: Halaman login tanpa proteksi</div><div class="step-desc">Login form tanpa rate limiting, tanpa CAPTCHA, tanpa account lockout. Tidak ada limit percobaan login.</div></div></div>
+                <div class="step-connector"></div>
+                <div class="flow-step" data-step="1"><div class="step-num">2</div><div class="step-content"><div class="step-label">🤖 Brute Force Attack</div><div class="step-desc">Penyerang menggunakan tools (Hydra, Burp) untuk mencoba ribuan password per menit:</div><div class="step-code">admin:password123 → ❌<br>admin:admin123 → ❌<br>admin:<span class="bad">Adm1n@2026 → ✅ BERHASIL!</span></div></div></div>
+                <div class="step-connector"></div>
+                <div class="flow-step" data-step="2"><div class="step-num">3</div><div class="step-content"><div class="step-label">📋 Credential Stuffing</div><div class="step-desc">Menggunakan username+password yang bocor dari breach lain. 60% user pakai password sama di banyak situs!</div></div></div>
+                <div class="step-connector"></div>
+                <div class="flow-step" data-step="3"><div class="step-num">4</div><div class="step-content"><div class="step-label">🔒 Session Fixation/Hijacking</div><div class="step-desc">Session ID tidak di-regenerate setelah login → penyerang yang mengetahui session ID bisa mengambil alih session.</div></div></div>
+                <div class="step-connector"></div>
+                <div class="flow-step" data-step="4"><div class="step-num">5</div><div class="step-content"><div class="step-label">🕵️ User Enumeration</div><div class="step-desc">Pesan error berbeda: "Username tidak ditemukan" vs "Password salah" → penyerang tahu username mana yang valid.</div></div></div>
+                <div class="step-connector"></div>
+                <div class="flow-step" data-step="5"><div class="step-num">6</div><div class="step-content"><div class="step-label">💥 Account Takeover massal</div><div class="step-desc">Ribuan akun diambil alih. Financial fraud, data theft, identity theft — kerugian besar bagi user dan organisasi.</div></div></div>
+            </div>
+        </div>
+        <div class="anim-controls"><button class="ctrl-btn" id="prevBtn" onclick="prevStep()" disabled>← Prev</button><span class="step-indicator" id="stepIndicator">1 / 6</span><button class="ctrl-btn primary" id="nextBtn" onclick="nextStep()">Next →</button><button class="ctrl-btn" id="autoBtn" onclick="autoPlay()">▶ Auto</button></div>
+    </div>
+    <div class="code-compare">
+        <div class="code-box"><div class="code-label vuln">⚠️ RENTAN</div><div class="code-body">if ($pass === "admin123") {
+  $_SESSION['user'] = $username;
+  // ⚠️ Session ID tidak di-regenerate
+  // ⚠️ Tidak ada rate limiting
+  // ⚠️ "Username tidak ditemukan"
+  //    vs "Password salah" (enumeration)
+}</div></div>
+        <div class="code-box"><div class="code-label safe">✅ AMAN</div><div class="code-body">if (password_verify($pass, $hash)) {
+  session_regenerate_id(true);
+  $_SESSION['login_time'] = time();
+}
+// ✅ Rate limit: max 5 attempts
+// ✅ Account lockout 15 min
+// ✅ Generic: "Invalid credentials"
+// ✅ MFA (2FA) enabled</div></div>
+    </div>
+    <div class="info-grid">
+        <div class="info-card danger"><h3>💀 Dampak</h3><ul><li>Mass account takeover</li><li>Financial fraud</li><li>Identity theft</li><li>Data breach via admin account</li></ul></div>
+        <div class="info-card success"><h3>🛡️ Pencegahan</h3><ul><li>Rate limiting + account lockout</li><li>MFA / 2FA</li><li>session_regenerate_id() setelah login</li><li>Generic error messages</li><li>Password policy (min 12 char)</li></ul></div>
+    </div>
+    <div class="anim-disclaimer">⚠️ <strong>EDUKASI ONLY</strong></div>
+</div>
+<script>let current=-1;const total=6;const steps=document.querySelectorAll('.flow-step');function updateSteps(){steps.forEach((s,i)=>{s.classList.remove('active','done');if(i<current)s.classList.add('done');else if(i===current)s.classList.add('active');});document.getElementById('stepIndicator').textContent=`${current+1} / ${total}`;document.getElementById('prevBtn').disabled=current<=0;document.getElementById('nextBtn').disabled=current>=total-1;}function nextStep(){if(current<total-1){current++;updateSteps();}}function prevStep(){if(current>0){current--;updateSteps();}}function autoPlay(){current=-1;updateSteps();let i=0;const iv=setInterval(()=>{if(i>=total){clearInterval(iv);return;}current=i++;updateSteps();},1200);}nextStep();</script>
+</body></html>

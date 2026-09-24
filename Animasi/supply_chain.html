@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="id">
+<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Supply Chain Attack — Animasi | CYBERSHIELD 2026</title><link rel="stylesheet" href="shared.css"></head>
+<body>
+<div class="bg-grid"></div><div class="bg-glow bg-glow-1"></div><div class="bg-glow bg-glow-2"></div>
+<div class="page">
+    <div class="anim-header">
+        <div class="anim-badge" style="background:rgba(239,68,68,0.15);color:#ef4444;border:1px solid rgba(239,68,68,0.3);">📦 VULNERABLE & OUTDATED COMPONENTS</div>
+        <h1>Cara Kerja <span>Supply Chain Attack</span></h1>
+        <p>Menggunakan library pihak ketiga (NPM, PyPI, Composer) yang rentan atau disusupi backdoor.</p>
+        <div class="nav-links"><a href="misconfig.html" class="nav-link">← Misconfiguration</a><a href="index.html" class="nav-link">🏠 Semua Animasi</a><a href="open_redirect.html" class="nav-link">Open Redirect →</a></div>
+    </div>
+    <div class="anim-container">
+        <div class="anim-viewport">
+            <div class="flow" id="flow">
+                <div class="flow-step" data-step="0"><div class="step-num">1</div><div class="step-content"><div class="step-label">📦 Developer menginstall library</div><div class="step-desc">Developer menggunakan package populer seperti 'lodash' atau 'log4j' tanpa mengecek kerentanannya.</div></div></div>
+                <div class="step-connector"></div>
+                <div class="flow-step" data-step="1"><div class="step-num">2</div><div class="step-content"><div class="step-label">🦠 Library disusupi atau rentan</div><div class="step-desc">Attacker menyusupkan kode jahat ke versi baru library tersebut di NPM/PyPI, atau menemukan 0-day.</div></div></div>
+                <div class="step-connector"></div>
+                <div class="flow-step" data-step="2"><div class="step-num">3</div><div class="step-content"><div class="step-label">⚙️ Aplikasi membuild dependency</div><div class="step-desc">Saat aplikasi di-deploy, kode berbahaya (backdoor) otomatis ikut ter-install di server produksi.</div></div></div>
+                <div class="step-connector"></div>
+                <div class="flow-step" data-step="3"><div class="step-num">4</div><div class="step-content"><div class="step-label">📡 Backdoor aktif</div><div class="step-desc">Kode pihak ketiga ini berjalan di background dan mencuri variabel environment (password DB/AWS Keys).</div></div></div>
+                <div class="step-connector"></div>
+                <div class="flow-step" data-step="4"><div class="step-num">5</div><div class="step-content"><div class="step-label">💥 Server dikompromikan dari dalam</div><div class="step-desc">Meskipun kode developer aman, aplikasi tetap hancur karena menggunakan komponen yang rapuh.</div></div></div>
+
+            </div>
+        </div>
+        <div class="anim-controls"><button class="ctrl-btn" id="prevBtn" onclick="prevStep()" disabled>← Prev</button><span class="step-indicator" id="stepIndicator">1 / 5</span><button class="ctrl-btn primary" id="nextBtn" onclick="nextStep()">Next →</button><button class="ctrl-btn" id="autoBtn" onclick="autoPlay()">▶ Auto</button></div>
+    </div>
+    <div class="code-compare">
+        <div class="code-box"><div class="code-label vuln">⚠️ RENTAN</div><div class="code-body">// package.json
+"dependencies": {
+  "log4j": "2.14.0", // Sangat Rentan (Log4Shell)
+  "express": "*" // Selalu update versi terbaru tanpa cek
+}</div></div>
+        <div class="code-box"><div class="code-label safe">✅ AMAN</div><div class="code-body">// package.json
+"dependencies": {
+  "log4j": "2.17.1", // Sudah di-patch
+  "express": "4.18.2" // Versi dipin dengan aman
+}</div></div>
+    </div>
+    <div class="info-grid">
+        <div class="info-card danger"><h3>💀 Dampak</h3><ul><li>Zero-click RCE (seperti Log4Shell)</li><li>Data exfiltration via dependency</li><li>Ransomware terdistribusi</li><li>Kredensial developer dicuri</li></ul></div>
+        <div class="info-card success"><h3>🛡️ Pencegahan</h3><ul><li>Rutin audit dependencies</li><li>Gunakan Software Bill of Materials (SBOM)</li><li>Gunakan tool SAST/SCA</li><li>Lockfile validation</li></ul></div>
+    </div>
+    <div class="anim-disclaimer">⚠️ <strong>EDUKASI ONLY</strong></div>
+</div>
+<script>let current=-1;const total=5;const steps=document.querySelectorAll('.flow-step');function updateSteps(){steps.forEach((s,i)=>{s.classList.remove('active','done');if(i<current)s.classList.add('done');else if(i===current)s.classList.add('active');});document.getElementById('stepIndicator').textContent=`${current+1} / ${total}`;document.getElementById('prevBtn').disabled=current<=0;document.getElementById('nextBtn').disabled=current>=total-1;}function nextStep(){if(current<total-1){current++;updateSteps();}}function prevStep(){if(current>0){current--;updateSteps();}}function autoPlay(){current=-1;updateSteps();let i=0;const iv=setInterval(()=>{if(i>=total){clearInterval(iv);return;}current=i++;updateSteps();},1200);}nextStep();</script>
+</body></html>

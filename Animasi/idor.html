@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="id">
+<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>IDOR — Animasi | CYBERSHIELD 2026</title><link rel="stylesheet" href="shared.css"></head>
+<body>
+<div class="bg-grid"></div><div class="bg-glow bg-glow-1"></div><div class="bg-glow bg-glow-2"></div>
+<div class="page">
+    <div class="anim-header">
+        <div class="anim-badge" style="background:rgba(251,146,60,0.15);color:#fb923c;border:1px solid rgba(251,146,60,0.3);">🔑 IDOR — A01:2026</div>
+        <h1>Cara Kerja <span>IDOR</span></h1>
+        <p>Ubah ID di URL/parameter → akses data user lain tanpa otorisasi. Bagian dari Broken Access Control.</p>
+        <div class="nav-links"><a href="broken_access.html" class="nav-link">← Broken Access</a><a href="index.html" class="nav-link">🏠 Semua Animasi</a><a href="auth_fail.html" class="nav-link">Auth Failures →</a></div>
+    </div>
+    <div class="anim-container">
+        <div class="anim-viewport">
+            <div class="flow" id="flow">
+                <div class="flow-step" data-step="0"><div class="step-num">1</div><div class="step-content"><div class="step-label">👤 User login dan akses data sendiri</div><div class="step-desc">User login → akses profil/invoice di URL: <code>/api/invoice/1001</code>. ID 1001 adalah invoice milik user ini.</div></div></div>
+                <div class="step-connector"></div>
+                <div class="flow-step" data-step="1"><div class="step-num">2</div><div class="step-content"><div class="step-label">🔢 Attacker melihat pattern ID</div><div class="step-desc">ID sequential (1001, 1002, 1003...) mudah ditebak. Penyerang mencoba mengubah ID:</div><div class="step-code">/api/invoice/<span class="bad">1002</span> → Invoice user lain?</div></div></div>
+                <div class="step-connector"></div>
+                <div class="flow-step" data-step="2"><div class="step-num">3</div><div class="step-content"><div class="step-label">📄 Server mengembalikan data tanpa auth check</div><div class="step-desc">Server TIDAK memeriksa apakah invoice 1002 milik user yang sedang login. Data user lain langsung dikembalikan!</div></div></div>
+                <div class="step-connector"></div>
+                <div class="flow-step" data-step="3"><div class="step-num">4</div><div class="step-content"><div class="step-label">🤖 Automasi dengan Burp Intruder</div><div class="step-desc">Penyerang menggunakan tools untuk iterate semua ID: 1001-9999. Download massal semua invoice/data.</div></div></div>
+                <div class="step-connector"></div>
+                <div class="flow-step" data-step="4"><div class="step-num">5</div><div class="step-content"><div class="step-label">💥 Data breach massal</div><div class="step-desc">Semua invoice, profil, dokumen pribadi user terekspos. KTP, alamat, data keuangan — semua bocor.</div></div></div>
+            </div>
+        </div>
+        <div class="anim-controls"><button class="ctrl-btn" id="prevBtn" onclick="prevStep()" disabled>← Prev</button><span class="step-indicator" id="stepIndicator">1 / 5</span><button class="ctrl-btn primary" id="nextBtn" onclick="nextStep()">Next →</button><button class="ctrl-btn" id="autoBtn" onclick="autoPlay()">▶ Auto</button></div>
+    </div>
+    <div class="code-compare">
+        <div class="code-box"><div class="code-label vuln">⚠️ RENTAN</div><div class="code-body">$id = $_GET['id'];
+$invoice = getInvoice($id);
+echo json_encode($invoice);
+// Ubah id=1001 → id=1002
+// → Lihat invoice user lain!</div></div>
+        <div class="code-box"><div class="code-label safe">✅ AMAN</div><div class="code-body">$id = $_GET['id'];
+$invoice = getInvoice($id);
+// Cek apakah milik user ini!
+if ($invoice['user_id'] !== $_SESSION['uid']) {
+  http_response_code(403);
+  die('{"error":"Forbidden"}');
+}
+// + Gunakan UUID bukan sequential ID</div></div>
+    </div>
+    <div class="info-grid">
+        <div class="info-card danger"><h3>💀 Dampak</h3><ul><li>Data breach massal (iterate IDs)</li><li>Akses dokumen pribadi user lain</li><li>Financial data exposure</li><li>Compliance violation (GDPR, PDP)</li></ul></div>
+        <div class="info-card success"><h3>🛡️ Pencegahan</h3><ul><li>Authorization check SETIAP request</li><li>UUID bukan sequential integer</li><li>Row-level security di database</li><li>Automated IDOR testing</li></ul></div>
+    </div>
+    <div class="anim-disclaimer">⚠️ <strong>EDUKASI ONLY</strong></div>
+</div>
+<script>let current=-1;const total=5;const steps=document.querySelectorAll('.flow-step');function updateSteps(){steps.forEach((s,i)=>{s.classList.remove('active','done');if(i<current)s.classList.add('done');else if(i===current)s.classList.add('active');});document.getElementById('stepIndicator').textContent=`${current+1} / ${total}`;document.getElementById('prevBtn').disabled=current<=0;document.getElementById('nextBtn').disabled=current>=total-1;}function nextStep(){if(current<total-1){current++;updateSteps();}}function prevStep(){if(current>0){current--;updateSteps();}}function autoPlay(){current=-1;updateSteps();let i=0;const iv=setInterval(()=>{if(i>=total){clearInterval(iv);return;}current=i++;updateSteps();},1200);}nextStep();</script>
+</body></html>

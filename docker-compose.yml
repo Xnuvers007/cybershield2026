@@ -1,0 +1,62 @@
+# ============================================================================
+# 🛡️ CYBERSHIELD 2026 — Docker Compose
+# ============================================================================
+# Menjalankan 2 container: Web (PHP+Apache) + Database (MySQL)
+# ============================================================================
+
+services:
+  # Container 1: Web Server (PHP + Apache)
+  web:
+    build: .
+    container_name: cybershield-web
+    ports:
+      - "8080:80"
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      - DB_HOST=db
+      - DB_USER=root
+      - DB_PASS=
+      - DB_NAME=cybershield_lab
+    volumes:
+      - .:/var/www/html
+    restart: unless-stopped
+
+  # Container 2: Database (MySQL)
+  db:
+    image: mysql:8.0
+    container_name: cybershield-db
+    environment:
+      MYSQL_ROOT_PASSWORD: ""
+      MYSQL_ALLOW_EMPTY_PASSWORD: "yes"
+      MYSQL_DATABASE: cybershield_lab
+    ports:
+      - "3307:3306"
+    volumes:
+      - ./setup_database.sql:/docker-entrypoint-initdb.d/01-setup.sql
+      - ./setup_target.sql:/docker-entrypoint-initdb.d/02-target.sql
+      - db_data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+    restart: unless-stopped
+
+  # Container 3 (Opsional): phpMyAdmin untuk kelola database via browser
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    container_name: cybershield-pma
+    environment:
+      PMA_HOST: db
+      PMA_USER: root
+      PMA_PASSWORD: ""
+    ports:
+      - "8081:80"
+    depends_on:
+      - db
+    restart: unless-stopped
+
+volumes:
+  db_data:

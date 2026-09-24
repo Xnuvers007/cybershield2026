@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="id">
+<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Cryptographic Failures — Animasi | CYBERSHIELD 2026</title><link rel="stylesheet" href="shared.css"></head>
+<body>
+<div class="bg-grid"></div><div class="bg-glow bg-glow-1"></div><div class="bg-glow bg-glow-2"></div>
+<div class="page">
+    <div class="anim-header">
+        <div class="anim-badge" style="background:rgba(245,158,11,0.15);color:#f59e0b;border:1px solid rgba(245,158,11,0.3);">🔏 CRYPTOGRAPHIC FAILURES</div>
+        <h1>Cara Kerja <span>Cryptographic Failures</span></h1>
+        <p>Kegagalan melindungi data sensitif karena kurangnya enkripsi, algoritma yang lemah, atau key management yang buruk.</p>
+        <div class="nav-links"><a href="csrf.html" class="nav-link">← CSRF</a><a href="index.html" class="nav-link">🏠 Semua Animasi</a><a href="deserialization.html" class="nav-link">Deserialization →</a></div>
+    </div>
+    <div class="anim-container">
+        <div class="anim-viewport">
+            <div class="flow" id="flow">
+                <div class="flow-step" data-step="0"><div class="step-num">1</div><div class="step-content"><div class="step-label">📄 Data disimpan tanpa enkripsi kuat</div><div class="step-desc">Developer menyimpan password pengguna menggunakan MD5 atau Base64 di database.</div></div></div>
+                <div class="step-connector"></div>
+                <div class="flow-step" data-step="1"><div class="step-num">2</div><div class="step-content"><div class="step-label">🔓 Database bocor (Data Breach)</div><div class="step-desc">Melalui SQL Injection atau Backup yang tertinggal, attacker mendapatkan tabel pengguna.</div></div></div>
+                <div class="step-connector"></div>
+                <div class="flow-step" data-step="2"><div class="step-num">3</div><div class="step-content"><div class="step-label">🖥️ Attacker cracking hash</div><div class="step-desc">Attacker menggunakan 'Rainbow Tables' atau GPU cracking (Hashcat) untuk membobol MD5 dalam hitungan detik.</div></div></div>
+                <div class="step-connector"></div>
+                <div class="flow-step" data-step="3"><div class="step-num">4</div><div class="step-content"><div class="step-label">🔑 Password asli didapatkan</div><div class="step-desc">Jutaan password asli pengguna terekspos karena hash yang digunakan sudah usang/lemah.</div></div></div>
+                <div class="step-connector"></div>
+                <div class="flow-step" data-step="4"><div class="step-num">5</div><div class="step-content"><div class="step-label">💥 Credential Stuffing</div><div class="step-desc">Attacker menggunakan password yang sama untuk mencoba login ke akun Bank atau Email korban.</div></div></div>
+
+            </div>
+        </div>
+        <div class="anim-controls"><button class="ctrl-btn" id="prevBtn" onclick="prevStep()" disabled>← Prev</button><span class="step-indicator" id="stepIndicator">1 / 5</span><button class="ctrl-btn primary" id="nextBtn" onclick="nextStep()">Next →</button><button class="ctrl-btn" id="autoBtn" onclick="autoPlay()">▶ Auto</button></div>
+    </div>
+    <div class="code-compare">
+        <div class="code-box"><div class="code-label vuln">⚠️ RENTAN</div><div class="code-body">// Sangat rentan! Mudah di-crack (rainbow table)
+$hash = md5($_POST['password']);
+// Data sensitif via HTTP biasa</div></div>
+        <div class="code-box"><div class="code-label safe">✅ AMAN</div><div class="code-body">// Sangat aman! Menggunakan bcrypt/Argon2
+$hash = password_hash($_POST['password'], PASSWORD_BCRYPT);
+// Paksa HTTPS / HSTS</div></div>
+    </div>
+    <div class="info-grid">
+        <div class="info-card danger"><h3>💀 Dampak</h3><ul><li>Password cracking massal</li><li>Pencurian data kartu kredit</li><li>Sniffing jaringan (Man In The Middle)</li><li>Sertifikat SSL kedaluwarsa/lemah</li></ul></div>
+        <div class="info-card success"><h3>🛡️ Pencegahan</h3><ul><li>Gunakan algoritma modern (bcrypt, AES-GCM)</li><li>Jangan gunakan MD5 / SHA1</li><li>Selalu gunakan HTTPS (HSTS)</li><li>Jangan hardcode secret key</li></ul></div>
+    </div>
+    <div class="anim-disclaimer">⚠️ <strong>EDUKASI ONLY</strong></div>
+</div>
+<script>let current=-1;const total=5;const steps=document.querySelectorAll('.flow-step');function updateSteps(){steps.forEach((s,i)=>{s.classList.remove('active','done');if(i<current)s.classList.add('done');else if(i===current)s.classList.add('active');});document.getElementById('stepIndicator').textContent=`${current+1} / ${total}`;document.getElementById('prevBtn').disabled=current<=0;document.getElementById('nextBtn').disabled=current>=total-1;}function nextStep(){if(current<total-1){current++;updateSteps();}}function prevStep(){if(current>0){current--;updateSteps();}}function autoPlay(){current=-1;updateSteps();let i=0;const iv=setInterval(()=>{if(i>=total){clearInterval(iv);return;}current=i++;updateSteps();},1200);}nextStep();</script>
+</body></html>

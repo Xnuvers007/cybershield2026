@@ -1,0 +1,6 @@
+db_data/
+*.rar
+*.zip
+.git/
+.vscode/
+node_modules/

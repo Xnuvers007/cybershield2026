@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="id">
+<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>DOM-based XSS — Animasi | CYBERSHIELD 2026</title><link rel="stylesheet" href="shared.css"></head>
+<body>
+<div class="bg-grid"></div><div class="bg-glow bg-glow-1"></div><div class="bg-glow bg-glow-2"></div>
+<div class="page">
+    <div class="anim-header">
+        <div class="anim-badge" style="background:rgba(139,92,246,0.15);color:#8b5cf6;border:1px solid rgba(139,92,246,0.3);">🌐 DOM-BASED CROSS-SITE SCRIPTING</div>
+        <h1>Cara Kerja <span>DOM-based XSS</span></h1>
+        <p>XSS yang terjadi seluruhnya di client-side JavaScript, tanpa payload terlihat di sisi server.</p>
+        <div class="nav-links"><a href="xss_stored.html" class="nav-link">← Stored XSS</a><a href="index.html" class="nav-link">🏠 Semua Animasi</a><a href="command_injection.html" class="nav-link">Command Inj. →</a></div>
+    </div>
+    <div class="anim-container">
+        <div class="anim-viewport">
+            <div class="flow" id="flow">
+                <div class="flow-step" data-step="0"><div class="step-num">1</div><div class="step-content"><div class="step-label">💻 Aplikasi menggunakan client-side JS</div><div class="step-desc">Website SPA (React/Vue/Vanilla) mengambil nilai dari fragment URL (#) atau parameter.</div></div></div>
+                <div class="step-connector"></div>
+                <div class="flow-step" data-step="1"><div class="step-num">2</div><div class="step-content"><div class="step-label">🔗 Attacker membuat link</div><div class="step-desc">Membuat URL: <code>#lang=&lt;img src=x onerror=alert(1)&gt;</code></div></div></div>
+                <div class="step-connector"></div>
+                <div class="flow-step" data-step="2"><div class="step-num">3</div><div class="step-content"><div class="step-label">📧 Korban mengklik link</div><div class="step-desc">Karena payload ada setelah '#', browser tidak mengirimnya ke server, bypass WAF/Filter.</div></div></div>
+                <div class="step-connector"></div>
+                <div class="flow-step" data-step="3"><div class="step-num">4</div><div class="step-content"><div class="step-label">🔄 JavaScript memproses fragment</div><div class="step-desc">Kode <code>innerHTML = location.hash</code> dijalankan langsung oleh browser.</div></div></div>
+                <div class="step-connector"></div>
+                <div class="flow-step" data-step="4"><div class="step-num">5</div><div class="step-content"><div class="step-label">💥 DOM termanipulasi</div><div class="step-desc">Browser merender tag HTML berbahaya dan mengeksekusi onerror event di komputer korban.</div></div></div>
+
+            </div>
+        </div>
+        <div class="anim-controls"><button class="ctrl-btn" id="prevBtn" onclick="prevStep()" disabled>← Prev</button><span class="step-indicator" id="stepIndicator">1 / 5</span><button class="ctrl-btn primary" id="nextBtn" onclick="nextStep()">Next →</button><button class="ctrl-btn" id="autoBtn" onclick="autoPlay()">▶ Auto</button></div>
+    </div>
+    <div class="code-compare">
+        <div class="code-box"><div class="code-label vuln">⚠️ RENTAN</div><div class="code-body">const params = new URLSearchParams(window.location.search);
+const name = params.get('name');
+// Berbahaya: innerHTML
+document.getElementById('greeting').innerHTML = name;</div></div>
+        <div class="code-box"><div class="code-label safe">✅ AMAN</div><div class="code-body">const params = new URLSearchParams(window.location.search);
+const name = params.get('name');
+// Aman: textContent
+document.getElementById('greeting').textContent = name;</div></div>
+    </div>
+    <div class="info-grid">
+        <div class="info-card danger"><h3>💀 Dampak</h3><ul><li>Pencurian Data Sensitif</li><li>Manipulasi DOM lokal</li><li>Aksi tidak sah via JavaScript</li><li>Bypass server-side filter</li></ul></div>
+        <div class="info-card success"><h3>🛡️ Pencegahan</h3><ul><li>Gunakan textContent bukan innerHTML</li><li>Hindari eval(), setTimeout() dengan string</li><li>Sanitasi DOM input (DOMPurify)</li><li>Audit client-side JS</li></ul></div>
+    </div>
+    <div class="anim-disclaimer">⚠️ <strong>EDUKASI ONLY</strong></div>
+</div>
+<script>let current=-1;const total=5;const steps=document.querySelectorAll('.flow-step');function updateSteps(){steps.forEach((s,i)=>{s.classList.remove('active','done');if(i<current)s.classList.add('done');else if(i===current)s.classList.add('active');});document.getElementById('stepIndicator').textContent=`${current+1} / ${total}`;document.getElementById('prevBtn').disabled=current<=0;document.getElementById('nextBtn').disabled=current>=total-1;}function nextStep(){if(current<total-1){current++;updateSteps();}}function prevStep(){if(current>0){current--;updateSteps();}}function autoPlay(){current=-1;updateSteps();let i=0;const iv=setInterval(()=>{if(i>=total){clearInterval(iv);return;}current=i++;updateSteps();},1200);}nextStep();</script>
+</body></html>

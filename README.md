@@ -10,8 +10,8 @@
 [![OWASP](https://img.shields.io/badge/OWASP-Top_10_(2021)-000000?style=for-the-badge&logo=owasp&logoColor=white)](https://owasp.org/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-10b981?style=for-the-badge)](LICENSE)
 
-> *Lab praktik keamanan web interaktif berbasis OWASP Top 10 (2021)*  
-> **HIMTIF — Universitas Pamulang** | Webinar September 2026
+> *Lab praktik keamanan web interaktif berbasis OWASP Top 10 (2026)*  
+> **HIMTIF — Universitas Pamulang** | Webinar 24 September 2026
 
 ---
 
@@ -84,7 +84,7 @@ docker compose up -d --build
 
 ## 📋 Daftar Lab Kerentanan
 
-### OWASP Top 10 (2021)
+### OWASP Top 10 (2026)
 
 | # | Folder | Kategori | Kerentanan | Severity |
 |:-:|--------|----------|------------|:--------:|
@@ -212,7 +212,7 @@ Buka **`presentasi.html`** di browser untuk presentasi interaktif OWASP Top 10.
 
 | Sumber | Link |
 |--------|------|
-| OWASP Top 10 (2021) | [owasp.org/www-project-top-ten](https://owasp.org/www-project-top-ten/) |
+| OWASP Top 10 (2026) | [owasp.org/www-project-top-ten](https://owasp.org/www-project-top-ten/) |
 | OWASP Cheat Sheet Series | [cheatsheetseries.owasp.org](https://cheatsheetseries.owasp.org/) |
 | OWASP Testing Guide | [owasp.org/www-project-web-security-testing-guide](https://owasp.org/www-project-web-security-testing-guide/) |
 | PHP Security Best Practices | [php.net/manual/en/security.php](https://www.php.net/manual/en/security.php) |

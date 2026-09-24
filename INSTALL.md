@@ -48,14 +48,14 @@ Ada **4 cara** untuk menjalankan lab ini. Pilih yang paling sesuai:
 ### Langkah 3: Copy File Lab
 
 ```
-Salin seluruh folder "pelatihancyber" ke:
-C:\xampp\htdocs\pelatihancyber
+Salin seluruh folder "cybershield2026" ke:
+C:\xampp\htdocs\cybershield2026
 ```
 
 Atau jika Anda meng-clone dari Git:
 ```bash
 cd C:\xampp\htdocs
-git clone <url-repo> pelatihancyber
+git clone <url-repo> cybershield2026
 ```
 
 ### Langkah 4: Import Database
@@ -63,13 +63,13 @@ git clone <url-repo> pelatihancyber
 **Cara A — Lewat phpMyAdmin (GUI):**
 1. Buka browser → `http://localhost/phpmyadmin`
 2. Klik tab **Import**
-3. Pilih file `setup_database.sql` dari folder `pelatihancyber`
+3. Pilih file `setup_database.sql` dari folder `cybershield2026`
 4. Klik **Go / Kirim**
 5. Ulangi untuk file `setup_target.sql`
 
 **Cara B — Lewat Terminal (CMD):**
 ```bash
-cd C:\xampp\htdocs\pelatihancyber
+cd C:\xampp\htdocs\cybershield2026
 C:\xampp\mysql\bin\mysql.exe -u root < setup_database.sql
 C:\xampp\mysql\bin\mysql.exe -u root < setup_target.sql
 ```
@@ -77,7 +77,7 @@ C:\xampp\mysql\bin\mysql.exe -u root < setup_target.sql
 ### Langkah 5: Buka di Browser
 
 ```
-http://localhost/pelatihancyber/
+http://localhost/cybershield2026/
 ```
 
 ✅ **Selesai!** Anda sekarang bisa mengakses seluruh lab.
@@ -101,8 +101,8 @@ http://localhost/pelatihancyber/
 ### Langkah 3: Copy File Lab
 
 ```
-Salin folder "pelatihancyber" ke:
-C:\laragon\www\pelatihancyber
+Salin folder "cybershield2026" ke:
+C:\laragon\www\cybershield2026
 ```
 
 ### Langkah 4: Import Database
@@ -111,7 +111,7 @@ C:\laragon\www\pelatihancyber
 1. Klik kanan di Laragon → **Terminal**
 2. Jalankan:
 ```bash
-cd C:\laragon\www\pelatihancyber
+cd C:\laragon\www\cybershield2026
 mysql -u root < setup_database.sql
 mysql -u root < setup_target.sql
 ```
@@ -123,10 +123,10 @@ mysql -u root < setup_target.sql
 ### Langkah 5: Buka di Browser
 
 ```
-http://localhost/pelatihancyber/
+http://localhost/cybershield2026/
 ```
 
-> 💡 **Tips Laragon:** Laragon juga mendukung **Pretty URL**. Anda bisa mengakses lab via `http://pelatihancyber.test/` secara otomatis.
+> 💡 **Tips Laragon:** Laragon juga mendukung **Pretty URL**. Anda bisa mengakses lab via `http://cybershield2026.test/` secara otomatis.
 
 ✅ **Selesai!**
 
@@ -164,7 +164,7 @@ brew install --cask docker
 Buka terminal, lalu masuk ke folder tempat Anda menyimpan project ini:
 ```bash
 # Masuk ke folder project (sesuaikan dengan lokasi Anda)
-cd /lokasi/folder/pelatihancyber
+cd /lokasi/folder/cybershield2026
 
 docker compose up -d --build
 ```
@@ -238,7 +238,7 @@ Buka terminal, lalu masuk ke folder tempat Anda menyimpan project:
 **PowerShell (Windows):**
 ```powershell
 # Masuk ke folder project (sesuaikan path-nya)
-cd C:\xampp\htdocs\pelatihancyber   # contoh jika pakai XAMPP
+cd C:\xampp\htdocs\cybershield2026   # contoh jika pakai XAMPP
 
 cmd /c "mysql -u root < setup_database.sql"
 cmd /c "mysql -u root < setup_target.sql"
@@ -247,7 +247,7 @@ cmd /c "mysql -u root < setup_target.sql"
 **Bash (Linux/macOS):**
 ```bash
 # Masuk ke folder project (sesuaikan path-nya)
-cd ~/pelatihancyber
+cd ~/cybershield2026
 
 mysql -u root < setup_database.sql
 mysql -u root < setup_target.sql

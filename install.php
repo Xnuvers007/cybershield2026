@@ -355,11 +355,11 @@
                     <h3>Langkah 3: Copy File Lab</h3>
                     <p>Salin seluruh folder project ke dalam folder htdocs XAMPP:</p>
                     <pre><span class="comment"># Salin folder project ke htdocs</span>
-<span class="cmd">C:\xampp\htdocs\pelatihancyber\</span>
+<span class="cmd">C:\xampp\htdocs\cybershield2026\</span>
 
 <span class="comment"># Atau jika clone dari Git:</span>
 <span class="cmd">cd C:\xampp\htdocs</span>
-<span class="cmd">git clone &lt;url-repo&gt; pelatihancyber</span></pre>
+<span class="cmd">git clone &lt;url-repo&gt; cybershield2026</span></pre>
                 </div>
 
                 <div class="step">
@@ -374,7 +374,7 @@
                     </ol>
                     <p style="margin-top:12px;"><strong style="color:var(--accent-cyan);">Cara B — Terminal (CMD):</strong></p>
                     <pre><span class="comment"># Masuk ke folder project</span>
-<span class="cmd">cd C:\xampp\htdocs\pelatihancyber</span>
+<span class="cmd">cd C:\xampp\htdocs\cybershield2026</span>
 
 <span class="cmd">C:\xampp\mysql\bin\mysql.exe -u root &lt; setup_database.sql</span>
 <span class="cmd">C:\xampp\mysql\bin\mysql.exe -u root &lt; setup_target.sql</span></pre>
@@ -382,7 +382,7 @@
 
                 <div class="step">
                     <h3>Langkah 5: Buka di Browser</h3>
-                    <pre><span class="url">http://localhost/pelatihancyber/</span></pre>
+                    <pre><span class="url">http://localhost/cybershield2026/</span></pre>
                     <div class="info-box tip">✅ Selesai! Seluruh lab bisa diakses.</div>
                 </div>
 
@@ -423,21 +423,21 @@
                 <div class="step">
                     <h3>Langkah 3: Copy File Lab</h3>
                     <pre><span class="comment"># Salin folder project ke www Laragon</span>
-<span class="cmd">C:\laragon\www\pelatihancyber\</span></pre>
+<span class="cmd">C:\laragon\www\cybershield2026\</span></pre>
                 </div>
 
                 <div class="step">
                     <h3>Langkah 4: Import Database</h3>
                     <p>Klik kanan di Laragon → <strong>Terminal</strong>, lalu jalankan:</p>
-                    <pre><span class="cmd">cd C:\laragon\www\pelatihancyber</span>
+                    <pre><span class="cmd">cd C:\laragon\www\cybershield2026</span>
 <span class="cmd">mysql -u root &lt; setup_database.sql</span>
 <span class="cmd">mysql -u root &lt; setup_target.sql</span></pre>
                 </div>
 
                 <div class="step">
                     <h3>Langkah 5: Buka di Browser</h3>
-                    <pre><span class="url">http://localhost/pelatihancyber/</span></pre>
-                    <div class="info-box tip">💡 <strong>Tips:</strong> Laragon mendukung Pretty URL. Bisa akses via <code>http://pelatihancyber.test/</code> secara otomatis.</div>
+                    <pre><span class="url">http://localhost/cybershield2026/</span></pre>
+                    <div class="info-box tip">💡 <strong>Tips:</strong> Laragon mendukung Pretty URL. Bisa akses via <code>http://cybershield2026.test/</code> secara otomatis.</div>
                 </div>
 
             </div>
@@ -482,7 +482,7 @@
                     <h3>Langkah 2: Jalankan dengan Satu Perintah!</h3>
                     <p>Buka terminal, masuk ke folder project, lalu jalankan:</p>
                     <pre><span class="comment"># Masuk ke folder project (sesuaikan lokasi Anda)</span>
-<span class="cmd">cd /lokasi/folder/pelatihancyber</span>
+<span class="cmd">cd /lokasi/folder/cybershield2026</span>
 
 <span class="cmd">docker compose up -d --build</span></pre>
                     <div class="info-box tip">Docker otomatis membangun image PHP+Apache, menjalankan MySQL, dan mengimport database.</div>
@@ -549,13 +549,13 @@
                     <h3>Langkah 2: Import Database</h3>
                     <p><strong style="color:var(--accent-cyan);">PowerShell (Windows):</strong></p>
                     <pre><span class="comment"># Masuk ke folder project (sesuaikan path)</span>
-<span class="cmd">cd C:\xampp\htdocs\pelatihancyber</span>
+<span class="cmd">cd C:\xampp\htdocs\cybershield2026</span>
 
 <span class="cmd">cmd /c "mysql -u root &lt; setup_database.sql"</span>
 <span class="cmd">cmd /c "mysql -u root &lt; setup_target.sql"</span></pre>
                     <p style="margin-top:12px;"><strong style="color:var(--accent-cyan);">Bash (Linux/macOS):</strong></p>
                     <pre><span class="comment"># Masuk ke folder project (sesuaikan path)</span>
-<span class="cmd">cd ~/pelatihancyber</span>
+<span class="cmd">cd ~/cybershield2026</span>
 
 <span class="cmd">mysql -u root &lt; setup_database.sql</span>
 <span class="cmd">mysql -u root &lt; setup_target.sql</span></pre>
@@ -629,8 +629,8 @@
 <span class="cmd">EXIT;</span>
 
 <span class="comment"># Import data</span>
-<span class="cmd">mysql -u root < /var/www/html/pelatihancyber/setup_database.sql</span>
-<span class="cmd">mysql -u root < /var/www/html/pelatihancyber/setup_target.sql</span></pre>
+<span class="cmd">mysql -u root < /var/www/html/cybershield2026/setup_database.sql</span>
+<span class="cmd">mysql -u root < /var/www/html/cybershield2026/setup_target.sql</span></pre>
                     <div class="info-box tip">💡 Jika ingin menggunakan password untuk root, jangan lupa update koneksi di file PHP.</div>
                 </div>
 
@@ -638,15 +638,15 @@
                     <h3>Langkah 3: Clone / Upload Project</h3>
                     <pre><span class="comment"># Clone project ke DocumentRoot Apache</span>
 <span class="cmd">cd /var/www/html</span>
-<span class="cmd">sudo git clone &lt;url-repo&gt; pelatihancyber</span>
+<span class="cmd">sudo git clone &lt;url-repo&gt; cybershield2026</span>
 
 <span class="comment"># Set permission agar Apache bisa baca/tulis</span>
-<span class="cmd">sudo chown -R www-data:www-data /var/www/html/pelatihancyber</span>
-<span class="cmd">sudo chmod -R 755 /var/www/html/pelatihancyber</span>
+<span class="cmd">sudo chown -R www-data:www-data /var/www/html/cybershield2026</span>
+<span class="cmd">sudo chmod -R 755 /var/www/html/cybershield2026</span>
 
 <span class="comment"># Buat folder uploads untuk lab File Upload</span>
-<span class="cmd">sudo mkdir -p /var/www/html/pelatihancyber/15_File_Upload/uploads</span>
-<span class="cmd">sudo chmod 777 /var/www/html/pelatihancyber/15_File_Upload/uploads</span></pre>
+<span class="cmd">sudo mkdir -p /var/www/html/cybershield2026/15_File_Upload/uploads</span>
+<span class="cmd">sudo chmod 777 /var/www/html/cybershield2026/15_File_Upload/uploads</span></pre>
                 </div>
 
                 <div class="step">
@@ -656,9 +656,9 @@
                     <p>Isi dengan konfigurasi berikut:</p>
                     <pre><span class="cmd">&lt;VirtualHost *:80&gt;</span>
     <span class="cmd">ServerName cybershield.local</span>
-    <span class="cmd">DocumentRoot /var/www/html/pelatihancyber</span>
+    <span class="cmd">DocumentRoot /var/www/html/cybershield2026</span>
 
-    <span class="cmd">&lt;Directory /var/www/html/pelatihancyber&gt;</span>
+    <span class="cmd">&lt;Directory /var/www/html/cybershield2026&gt;</span>
         <span class="cmd">AllowOverride All</span>
         <span class="cmd">Require all granted</span>
     <span class="cmd">&lt;/Directory&gt;</span>
@@ -718,7 +718,7 @@
 
                 <div class="step">
                     <h3>Langkah 8: Buka di Browser</h3>
-                    <pre><span class="url">http://IP-SERVER-ANDA/pelatihancyber/</span>
+                    <pre><span class="url">http://IP-SERVER-ANDA/cybershield2026/</span>
 <span class="comment"># atau jika pakai VirtualHost:</span>
 <span class="url">http://cybershield.local/</span></pre>
                     <div class="info-box tip">✅ Selesai! Anda baru saja meng-deploy lab dari nol menggunakan LAMP stack.</div>

@@ -50,8 +50,8 @@ Seluruh kode dalam repositori ini dibuat **KHUSUS untuk tujuan edukasi**. Kode y
 
 ```bash
 # 1. Clone repositori
-git clone <url-repo> pelatihancyber
-cd pelatihancyber
+git clone <url-repo> cybershield2026
+cd cybershield2026
 
 # 2. Import database
 mysql -u root < setup_database.sql
@@ -131,7 +131,7 @@ Aplikasi web target lengkap untuk simulasi serangan berantai (*attack chaining*)
 ## 🗂️ Struktur Proyek
 
 ```
-pelatihancyber/
+cybershield2026/
 │
 ├── 📄 index.php                    # Portal utama (hacker theme + matrix rain)
 ├── 📊 presentasi.html              # Slide presentasi interaktif (22+ slides)

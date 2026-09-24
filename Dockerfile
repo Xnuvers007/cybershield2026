@@ -1,10 +1,3 @@
-# ============================================================================
-# 🛡️ CYBERSHIELD 2026 — Dockerfile
-# ============================================================================
-# Image: PHP 8.2 + Apache (Debian-based)
-# Fitur: mysqli, finfo (untuk file upload), dan mod_rewrite
-# ============================================================================
-
 FROM php:8.2-apache
 
 # Install ekstensi PHP yang dibutuhkan

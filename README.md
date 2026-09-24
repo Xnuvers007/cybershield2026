@@ -49,9 +49,10 @@ Seluruh kode dalam repositori ini dibuat **KHUSUS untuk tujuan edukasi**. Kode y
 ## 🚀 Quick Start
 
 ```bash
-# 1. Clone repositori
+# 1. Clone repositori (Pastikan Git terinstall: git-scm.com)
 git clone <url-repo> cybershield2026
 cd cybershield2026
+# (Bisa juga langsung klik tombol "Code" -> "Download ZIP" di GitHub jika tidak ada Git)
 
 # 2. Import database
 mysql -u root < setup_database.sql

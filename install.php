@@ -301,10 +301,12 @@
     <!-- Persyaratan -->
     <h2 style="font-size:0.9rem; margin-bottom:10px; color:var(--accent-cyan);">📋 PERSYARATAN SISTEM</h2>
     <table>
-        <tr><th>Komponen</th><th>Versi Minimum</th></tr>
+        <tr><th>Komponen</th><th>Versi / Syarat Minimum</th></tr>
+        <tr><td>Koneksi Internet</td><td>✅ Wajib (untuk download & Docker)</td></tr>
         <tr><td>PHP</td><td>7.4+ (Rekomendasi: 8.x)</td></tr>
         <tr><td>MySQL</td><td>5.7+ atau MariaDB 10.x</td></tr>
         <tr><td>Web Server</td><td>Apache / Nginx / PHP Built-in</td></tr>
+        <tr><td>Git</td><td>Opsional (Bisa download ZIP)</td></tr>
         <tr><td>Browser</td><td>Chrome / Firefox / Edge terbaru</td></tr>
     </table>
 
@@ -357,9 +359,11 @@
                     <pre><span class="comment"># Salin folder project ke htdocs</span>
 <span class="cmd">C:\xampp\htdocs\cybershield2026\</span>
 
-<span class="comment"># Atau jika clone dari Git:</span>
+<span class="comment"># Atau via Git (Pastikan Git terinstall: git-scm.com):</span>
 <span class="cmd">cd C:\xampp\htdocs</span>
-<span class="cmd">git clone &lt;url-repo&gt; cybershield2026</span></pre>
+<span class="cmd">git clone &lt;url-repo&gt; cybershield2026</span>
+
+<span class="comment"># Atau jika tidak ada Git, klik tombol "Code" -> "Download ZIP" di GitHub.</span></pre>
                 </div>
 
                 <div class="step">

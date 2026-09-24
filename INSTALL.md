@@ -9,9 +9,11 @@
 
 | Komponen | Versi Minimum |
 |----------|---------------|
+| Koneksi Internet | ✅ Wajib (untuk download & Docker) |
 | PHP      | 7.4+ (Rekomendasi: 8.x) |
 | MySQL    | 5.7+ atau MariaDB 10.x |
 | Web Server | Apache / Nginx / PHP Built-in Server |
+| Git      | Opsional (Bisa pakai Download ZIP) |
 | Browser  | Chrome / Firefox / Edge (terbaru) |
 
 ---
@@ -52,11 +54,12 @@ Salin seluruh folder "cybershield2026" ke:
 C:\xampp\htdocs\cybershield2026
 ```
 
-Atau jika Anda meng-clone dari Git:
+Atau via Git (Pastikan Git terinstall dari [git-scm.com](https://git-scm.com)):
 ```bash
 cd C:\xampp\htdocs
 git clone <url-repo> cybershield2026
 ```
+*(Jika tidak mau install Git, silakan klik tombol "Code" -> "Download ZIP" di GitHub, lalu ekstrak ke htdocs).*
 
 ### Langkah 4: Import Database
 
